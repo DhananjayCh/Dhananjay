@@ -1,0 +1,826 @@
+﻿
+@{
+    ViewBag.Title = "Setting Page";
+}
+
+@section style
+{
+    <!-- Internal Select2 css -->
+    <link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+
+    <!---Internal Fancy uploader css-->
+    <link href="~/assets/IntranetJs/fancyuploder/fancy_fileupload.css" rel="stylesheet" />
+
+    <!-- Internal Data table css -->
+    <link href="~/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/datatable/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/datatable/css/responsive.dataTables.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+
+
+    <!--Internal  Datetimepicker-slider css -->
+    <link href="~/assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet">
+
+}
+
+@section styleIntranet
+{
+   
+    <!--- CustomStyle css-->
+    <link href="~/assets/IntranetJs/CustomStyle.css" rel="stylesheet">
+
+    <link href="~/assets/IntranetJs/modelPopup.css" rel="stylesheet" />
+
+    <!-- include summernote css/js -->
+    <link href="~/assets/IntranetJs/summernote/css/summernote-bs4.min.css" rel="stylesheet">
+}
+
+<div class="container" ng-app="settingApp" ng-controller="settingController">
+    <div class="breadcrumb-header justify-content-between">
+        <div class="my-auto">
+            <div class="d-flex">
+                <h4 class="content-title mb-0 my-auto">Intranet</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ Setting</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-sm">
+        <div class="col-lg-12 col-md-12">
+            <div class="card" id="tabs-style4">
+                <div class="card-body">
+                    <div class="panel panel-primary">
+                        <div class="tab_wrapper left_tab">
+                            <ul class="tab_list">
+                                <li class="active">Article</li>
+                                <li>Notice</li>
+                                <li>Event</li>
+                                <li>Slider</li>
+                                <li>Awards</li>
+                                <li>Photo Gallery</li>
+                                <li>Settings</li>
+                            </ul>
+                            <div class="content_wrapper">
+                                <div class="tab_content active">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Article">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="ArticleDataTable" class="table key-buttons text-md-nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Article Title</th>
+                                                            <th class="border-bottom-0">Description</th>
+                                                            <th class="border-bottom-0">Pinned Article</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <tr ng-repeat="a in ArticleData">
+                                                            <td>{{n.Article_Title}}</td>
+                                                            <td>{{getTextFromHtml(n.Description)}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{n.Pinned_Article}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{n.Pinned_Article}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{n.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{n.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Notice">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="NoticeDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Notice Title</th>
+                                                            <th class="border-bottom-0">Description</th>
+                                                            <th class="border-bottom-0">Pinned Notice</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="n in NoticeData">
+                                                            <td>{{n.Notice_Title}}</td>
+                                                            <td>{{getTextFromHtml(n.Description)}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{n.Pinned_Notice}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{n.Pinned_Notice}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{n.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{n.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Event">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="EventDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Event Title</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Tiger Nixon</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Garrett Winters</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ashton Cox</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cedric Kelly</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Airi Satou</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Brielle Williamson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Herrod Chandler</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rhona Davidson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Colleen Hurst</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Sonya Frost</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jena Gaines</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Quinn Flynn</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Charde Marshall</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Slider">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="SliderDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Slider Title</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Tiger Nixon</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Garrett Winters</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ashton Cox</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cedric Kelly</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Airi Satou</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Brielle Williamson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Herrod Chandler</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rhona Davidson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Colleen Hurst</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Sonya Frost</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jena Gaines</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Quinn Flynn</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Charde Marshall</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Award">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="AwardDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Award Title</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Tiger Nixon</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Garrett Winters</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ashton Cox</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cedric Kelly</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Airi Satou</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Brielle Williamson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Herrod Chandler</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rhona Davidson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Colleen Hurst</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Sonya Frost</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jena Gaines</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Quinn Flynn</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Charde Marshall</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Gallery">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="GalleryDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">Gallery Title</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Tiger Nixon</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Garrett Winters</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ashton Cox</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cedric Kelly</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Airi Satou</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Brielle Williamson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Herrod Chandler</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rhona Davidson</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Colleen Hurst</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Sonya Frost</td>
+                                                            <td><span class="badge badge-danger">No</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jena Gaines</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Quinn Flynn</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Charde Marshall</td>
+                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <p> On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents .</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /div -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal left fade" id="exampleModalRight" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="overflow-y: scroll; max-height:90%;">
+                    <div class="row row-sm">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="Gallery_Title">Gallery Title</label>
+                                <input type="text" class="form-control" id="Gallery_Title" placeholder="Enter Gallery Title">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Reason_For_Award">Artical Pinned</label>
+                                    <div class="main-toggle mg-l-20">
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Reason_For_Award">Active</label>
+                                    <div class="main-toggle mg-l-20">
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="Reason_For_Award">Drop Images</label>
+                                <input id="demo" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png, html, zip, css,js" multiple>
+                                <div class="d-flex flex-row-reverse pd-t-20">
+                                    <button class="btn btn-dark" style="display:none" id="btnuploadAllButton" onclick="uploadAllButton()">Upload all files</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="checkFile">Save</button>
+                    <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <!--Internal Fancy uploader js-->
+    <script src="~/assets/IntranetJs/fancyuploder/jquery.ui.widget.js"></script>
+    <script src="~/assets/IntranetJs/fancyuploder/jquery.fileupload.js"></script>
+    <script src="~/assets/IntranetJs/fancyuploder/jquery.iframe-transport.js"></script>
+    <script src="~/assets/IntranetJs/fancyuploder/jquery.fancy-fileupload.js"></script>
+
+    <!--- Tabs JS-->
+    <script src="~/assets/plugins/tabs/jquery.multipurpose_tabcontent.js"></script>
+    <script src="~/assets/js/tabs.js"></script>
+
+    <!-- Internal Select2.min js -->
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+
+    <!--Internal  jquery-simple-datetimepicker js -->
+    <script src="~/assets/plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
+
+    <!-- Internal Data tables -->
+    <script src="~/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/responsive.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/jquery.dataTables.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.bootstrap4.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/pdfmake.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/vfs_fonts.js"></script>
+    <script src="~/assets/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/buttons.print.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/buttons.colVis.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/responsive.bootstrap4.min.js"></script>
+
+    <!--Internal  Datatable js -->
+    <script src="~/assets/IntranetJs/table-data.js"></script>
+
+    <script src="~/assets/IntranetJs/summernote/css/summernote-bs4.js"></script>
+
+    <script src="~/assets/IntranetJs/DatePicker.js"></script>
+    <script src="~/assets/IntranetJs/Setting.js"></script>
+    <script src="~/Scripts/Angular/Intranet/JS/SettingActions.js"></script>
+
+}

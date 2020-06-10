@@ -14,6 +14,8 @@
     <!-- Icons css -->
     <link href="~/assets/css/icons.css" rel="stylesheet">
 
+    @RenderSection("style", required: false)
+
     <!--  Right-sidemenu css -->
     <link href="~/assets/plugins/sidebar/sidebar.css" rel="stylesheet">
 
@@ -29,6 +31,8 @@
 
     <!--- Animations css-->
     <link href="~/assets/css/animate.css" rel="stylesheet">
+
+    @RenderSection("styleIntranet", required: false)
 
 
 </head>
@@ -235,22 +239,18 @@
     <div class="main-content horizontal-content">
 
         <!-- container opened -->
-        <div class="container">
+        @*<div class="container">
 
-            <!-- breadcrumb -->
-            <div class="breadcrumb-header justify-content-between">
-                <div class="my-auto">
-                    <div class="d-flex">
-                        <h4 class="content-title mb-0 my-auto">Pages</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ Empty</span>
+                <div class="breadcrumb-header justify-content-between">
+                    <div class="my-auto">
+                        <div class="d-flex">
+                            <h4 class="content-title mb-0 my-auto">Pages</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ Empty</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- breadcrumb -->
-            <!-- row -->
-            @RenderBody()
-            <!-- row closed -->
-        </div>
+            </div>*@
         <!-- Container closed -->
+        @RenderBody()
     </div>
     <!-- main-content closed -->
     <!-- Sidebar-right-->
@@ -901,6 +901,8 @@
     <!-- JQuery min js -->
     <script src="~/assets/plugins/jquery/jquery.min.js"></script>
 
+    <script src="~/Scripts/angular.min.js"></script>
+
     <!-- Bootstrap Bundle js -->
     <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -939,6 +941,6 @@
 
     <script src="~/Scripts/Angular/DAL/CommonJs.js"></script>
     <script src="~/Scripts/Angular/DAL/DAL.js"></script>
-
+    @RenderSection("scripts", required: false)
 </body>
 </html>
