@@ -3,3 +3,8 @@ C:\Users\lenovo\source\repos\Intranet\Intranet\bin\Debug\Intranet.pdb
 C:\Users\lenovo\source\repos\Intranet\Intranet\obj\Debug\Intranet.csprojAssemblyReference.cache
 C:\Users\lenovo\source\repos\Intranet\Intranet\obj\Debug\Intranet.dll
 C:\Users\lenovo\source\repos\Intranet\Intranet\obj\Debug\Intranet.pdb
+C:\Users\lenovo\Desktop\My Folder\Developement_Intranet\Dhananjay\Intranet\Intranet\bin\Debug\Intranet.dll.config
+C:\Users\lenovo\Desktop\My Folder\Developement_Intranet\Dhananjay\Intranet\Intranet\bin\Debug\Intranet.pdb
+C:\Users\lenovo\Desktop\My Folder\Developement_Intranet\Dhananjay\Intranet\Intranet\obj\Debug\Intranet.csprojAssemblyReference.cache
+C:\Users\lenovo\Desktop\My Folder\Developement_Intranet\Dhananjay\Intranet\Intranet\obj\Debug\Intranet.dll
+C:\Users\lenovo\Desktop\My Folder\Developement_Intranet\Dhananjay\Intranet\Intranet\obj\Debug\Intranet.pdb

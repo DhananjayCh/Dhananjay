@@ -18,7 +18,7 @@ namespace IntranetWeb.BAL.Intranet
             JArray jArray = new JArray();
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
-            rESTOption.select = "ID,Event_Name,Start_Date,End_Date,All_Day_Event,Pinned_Event,Active";
+            rESTOption.select = "ID,Event_Name,Start_Date,End_Date,All_Day_Event,Description,Pinned_Event,Active";
             rESTOption.top = "5000";
 
 
@@ -39,6 +39,7 @@ namespace IntranetWeb.BAL.Intranet
                     Event_Name = j["Event_Name"].ToString(),
                     Start_Date = j["Start_Date"].ToString(),
                     End_Date = j["End_Date"].ToString(),
+                    Description = j["Description"].ToString(),
                     All_Day_Event = (bool)j["All_Day_Event"],
                     Pinned_Event = (bool)j["Pinned_Event"],
                     Active = (bool)j["Active"],

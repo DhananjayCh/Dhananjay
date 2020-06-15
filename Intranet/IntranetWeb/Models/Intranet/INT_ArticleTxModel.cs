@@ -11,6 +11,7 @@ namespace IntranetWeb.Models.Intranet
         public string Title { get; set; }
         public string Article_Title { get; set; }
         public string Description { get; set; }
+        public string TestDescription { get; set; }
         public bool Pinned_Article { get; set; }
         public bool Active { get; set; }
 

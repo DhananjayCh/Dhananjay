@@ -19,6 +19,7 @@ namespace IntranetWeb.BAL.Intranet
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
             rESTOption.select = "ID,Title,Article_Title,Description,Pinned_Article,Active";
+            rESTOption.orderby = "ID desc";
             rESTOption.top = "5000";
 
 
@@ -43,6 +44,43 @@ namespace IntranetWeb.BAL.Intranet
                 }); ;
             }
             return articleData;
+        }
+
+        public string SaveArticle(ClientContext clientContext, string ItemData)
+        {
+            string response = RESTSave(clientContext, ItemData);
+            return response;
+        }
+
+        public string UpdateArticle(ClientContext clientContext, string ItemData, string ID)
+        {
+            string response = RESTUpdate(clientContext, ItemData, ID);
+            return response;
+        }
+
+        private string RESTUpdate(ClientContext clientContext, string ItemData, string ID)
+        {
+            RestService restService = new RestService();
+            return restService.UpdateItem(clientContext, "INT_ArticleTx", ItemData, ID);
+        }
+        private string RESTSave(ClientContext clientContext, string ItemData)
+        {
+            RestService restService = new RestService();
+            return restService.SaveItem(clientContext, "INT_ArticleTx", ItemData);
+        }
+
+
+        public string UploadDocument(ClientContext clientContext, HttpPostedFileBase files, string ItemData)
+        {
+
+            return RESTUploadFile(clientContext, files, ItemData);
+        }
+        private string RESTUploadFile(ClientContext clientContext, HttpPostedFileBase files, string ItemData)
+        {
+
+            RestService restService = new RestService();
+
+            return restService.UploadDocumentIntranet(clientContext, "INT_ImageLibrary", files, ItemData);
         }
     }
 
