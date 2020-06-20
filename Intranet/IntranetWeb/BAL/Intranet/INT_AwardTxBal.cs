@@ -18,7 +18,9 @@ namespace IntranetWeb.BAL.Intranet
             JArray jArray = new JArray();
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
-            rESTOption.select = "ID,Award_type,Emp_Code,Reason,Pinned_Awards,Active";
+            rESTOption.select = "ID,Award_type,Emp_Code,Reason,Pinned_Awards,Active,Emp_Id/Id,Emp_Id/EmpCode,Emp_Id/FirstName,Emp_Id/LastName";
+            rESTOption.expand = "Emp_Id";
+            rESTOption.orderby = "ID desc";
             rESTOption.top = "5000";
 
 
@@ -31,8 +33,16 @@ namespace IntranetWeb.BAL.Intranet
             List<INT_AwardTxModel> AwardData = new List<INT_AwardTxModel>();
             string filter = "";
             JArray jArray = RESTGet(clientContext, filter);
+            
+            //
             foreach (JObject j in jArray)
             {
+                Emp_IdChild childD = new Emp_IdChild();
+                childD.ID = Convert.ToInt32(j["Emp_Id"]["Id"]);
+                childD.FirstName = Convert.ToString(j["Emp_Id"]["FirstName"]);
+                childD.EmpCode = Convert.ToString(j["Emp_Id"]["EmpCode"]);
+                childD.LastName = Convert.ToString(j["Emp_Id"]["LastName"]);
+
                 AwardData.Add(new INT_AwardTxModel
                 {
                     ID = Convert.ToInt32(j["Id"]),
@@ -40,8 +50,9 @@ namespace IntranetWeb.BAL.Intranet
                     Emp_Code = j["Emp_Code"].ToString(),
                     Reason = j["Reason"].ToString(),
                     Pinned_Awards = (bool)j["Pinned_Awards"],
+                    Emp_Id = childD,
                     Active = (bool)j["Active"],
-                }); ;
+                }); 
             }
             return AwardData;
         }

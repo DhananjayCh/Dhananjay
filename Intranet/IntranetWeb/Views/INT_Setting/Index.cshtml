@@ -19,9 +19,11 @@
     <link href="~/assets/plugins/datatable/css/responsive.dataTables.min.css" rel="stylesheet">
     <link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
 
-
+    <!---Internal Fileupload css-->
+    <link href="~/Scripts/Angular/Intranet/JS/IntranetJs/fileuploads/css/fileupload.css" rel="stylesheet" type="text/css" />
     <!--Internal  Datetimepicker-slider css -->
     <link href="~/assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet">
+    <link href="~/assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet" />
 
 }
 
@@ -68,6 +70,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
+
                                         <div class="col-lg-12">
                                             <div class="table-responsive">
                                                 <table id="ArticleDataTable" class="table key-buttons text-md-nowrap">
@@ -145,7 +148,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(n,'Notice')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -182,8 +185,8 @@
                                                         <tr ng-repeat="e in EventData">
                                                             <td>{{e.ID}}</td>
                                                             <td>{{e.Event_Name}}</td>
-                                                            <td>{{e.Start_Date|date:"dd MMM, yyyy"}}</td>
-                                                            <td>{{e.End_Date|date:"dd MMM, yyyy"}}</td>
+                                                            <td>{{formatDate(e.Start_Date,'MM/DD/YYYY h:mm:ss a','DD MMM YYYY')}}</td>
+                                                            <td>{{formatDate(e.End_Date,'MM/DD/YYYY h:mm:ss a','DD MMM YYYY')}}</td>
                                                             <td>{{getTextFromHtml(e.Description)}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{e.Pinned_Event}}>Yes</span>
@@ -195,7 +198,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(e,'Event')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -239,7 +242,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(s,'Slider')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -308,126 +311,28 @@
                                                 <table id="GalleryDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
                                                     <thead>
                                                         <tr>
-                                                            <th class="border-bottom-0">Gallery Title</th>
+                                                            <th class="border-bottom-0">ID</th>
+                                                            <th class="border-bottom-0">Album Title</th>
+                                                            <th class="border-bottom-0">Pinned Album</th>
                                                             <th class="border-bottom-0">Active</th>
                                                             <th class="border-bottom-0">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>Tiger Nixon</td>
-                                                            <td><span class="badge badge-success">Yes</span></td>
+                                                        <tr ng-repeat="g in GalleryData">
+                                                            <td>{{g.ID}}</td>
+                                                            <td>{{g.Album_Title}}</td>
                                                             <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
+                                                                <span class="badge badge-success" ng-show={{g.Pinned_Album}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{g.Pinned_Album}}>No</span>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Garrett Winters</td>
-                                                            <td><span class="badge badge-success">Yes</span></td>
                                                             <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
+                                                                <span class="badge badge-success" ng-show={{g.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{g.Active}}>No</span>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Ashton Cox</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
                                                             <td>
                                                                 <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Cedric Kelly</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Airi Satou</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Brielle Williamson</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Herrod Chandler</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Rhona Davidson</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Colleen Hurst</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Sonya Frost</td>
-                                                            <td><span class="badge badge-danger">No</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Jena Gaines</td>
-                                                            <td><span class="badge badge-success">Yes</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Quinn Flynn</td>
-                                                            <td><span class="badge badge-success">Yes</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Charde Marshall</td>
-                                                            <td><span class="badge badge-success">Yes</span></td>
-                                                            <td>
-                                                                <div class="btn-icon-list">
-                                                                    <button class="btn btn-primary btn-icon"><i class="far fa-edit"></i></button>
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(g,'Gallery')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -463,7 +368,7 @@
                             <div class="form-group">
                                 <div class="main-toggle-group-demo yes-toggle">
                                     <label for="Reason_For_Award">Artical Pinned</label>
-                                    <div class="main-toggle mg-l-20">
+                                    <div class="main-toggle mg-l-20" id="pinned_Check">
                                         <span></span>
                                     </div>
                                 </div>
@@ -473,25 +378,77 @@
                             <div class="form-group">
                                 <div class="main-toggle-group-demo yes-toggle">
                                     <label for="Reason_For_Award">Active</label>
-                                    <div class="main-toggle mg-l-20">
+                                    <div class="main-toggle mg-l-20" id="active_Check">
                                         <span></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="Reason_For_Award">Drop Images</label>
-                                <input id="demo" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png, html, zip, css,js" multiple>
-                                <div class="d-flex flex-row-reverse pd-t-20">
-                                    <button class="btn btn-dark" style="display:none" id="btnuploadAllButton" onclick="uploadAllButton()">Upload all files</button>
+                        <div class="col-lg-12 tabs-style-1">
+                            <div class=" tab-menu-heading">
+                                <div class="tabs-menu1">
+                                    <!-- Tabs -->
+                                    <ul class="nav panel-tabs main-nav-line">
+                                        <li><a href="#tab1" class="nav-link active" data-toggle="tab">Drop Images</a></li>
+                                        <li><a href="#tab2" class="nav-link" data-toggle="tab">Previously Added</a></li>
+                                    </ul>
                                 </div>
                             </div>
+                            <div class="panel-body tabs-menu-body main-content-body-right border">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab1">
+                                        <div class="form-group">
+                                            <input id="demo" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png, html, zip, css,js" multiple>
+                                            <div class="d-flex flex-row-reverse pd-t-20">
+                                                <button class="btn btn-dark" style="display:none" id="btnuploadAllButton" onclick="uploadAllButton()">Upload all files</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tab2">
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-body pd-8-f">
+                                                        <div class="row">
+                                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                                Test
+                                                            </div>
+                                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                <div class="d-flex flex-row justify-content-end">
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(g,'Gallery')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                    <i class="si si-trash text-danger mr-2" data-toggle="tooltip" title="Delete" data-placement="top" data-original-title="Delete"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><img alt="Image" class="img-fluid card-img-top" src="../assets/img/photos/1.jpg">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-body pd-8-f">
+                                                        <div class="row">
+                                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                                Test
+                                                            </div>
+                                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                <div class="d-flex flex-row justify-content-end">
+                                                                    <i class="si si-trash text-danger mr-2" data-toggle="tooltip" title="Delete" data-placement="top" data-original-title="Delete"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><img alt="Image" class="img-fluid card-img-top" src="../assets/img/photos/1.jpg">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveActionData" data-saveType="" data-operation="" data-updateId="" >Save</button>
+                    <button type="button" class="btn btn-primary" id="saveActionData" data-saveType="" data-operation="" data-updateId="">Save</button>
                     <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                 </div>
@@ -510,9 +467,31 @@
             </div>
         </div>
     </div>
+
+    <div id="stack3" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Stack Three</h3>
+        </div>
+        <div class="modal-body">
+            <p>One fine body…</p>
+            <input type="text" data-tabindex="1">
+            <input type="text" data-tabindex="2">
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn">Close</button>
+            <button type="button" class="btn btn-primary">Ok</button>
+        </div>
+    </div>
+
 </div>
 @section scripts
 {
+
+    <!--Internal Fileuploads js-->
+    <script src="~/Scripts/Angular/Intranet/JS/IntranetJs/fileuploads/js/fileupload.js"></script>
+    <script src="~/Scripts/Angular/Intranet/JS/IntranetJs/fileuploads/js/file-upload.js"></script>
+
     <!--Internal Fancy uploader js-->
     <script src="~/Scripts/Angular/Intranet/JS/IntranetJs/fancyuploder/jquery.ui.widget.js"></script>
     <script src="~/Scripts/Angular/Intranet/JS/IntranetJs/fancyuploder/jquery.fileupload.js"></script>
@@ -528,6 +507,8 @@
 
     <!-- Internal Select2.min js -->
     <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+
+    <script src="~/assets/plugins/sweet-alert/sweetalert.min.js"></script>
 
     <!--Internal  jquery-simple-datetimepicker js -->
     <script src="~/assets/plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>

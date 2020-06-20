@@ -47,5 +47,28 @@ namespace IntranetWeb.BAL.Intranet
             return noticeData;
         }
 
+        public string SaveNotice(ClientContext clientContext, string ItemData)
+        {
+            string response = RESTSave(clientContext, ItemData);
+            return response;
+        }
+
+        public string UpdateNotice(ClientContext clientContext, string ItemData, string ID)
+        {
+            string response = RESTUpdate(clientContext, ItemData, ID);
+            return response;
+        }
+
+        private string RESTUpdate(ClientContext clientContext, string ItemData, string ID)
+        {
+            RestService restService = new RestService();
+            return restService.UpdateItem(clientContext, "INT_NoticeTx", ItemData, ID);
+        }
+        private string RESTSave(ClientContext clientContext, string ItemData)
+        {
+            RestService restService = new RestService();
+            return restService.SaveItem(clientContext, "INT_NoticeTx", ItemData);
+        }
+
     }
 }

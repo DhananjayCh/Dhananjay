@@ -206,4 +206,12 @@ ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner:after, .ribbon.ribb
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.fullScreenPopup {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+.tooltip {
+    z-index: 100000000!important;
+}
 /**********Fixed Hight End*************/

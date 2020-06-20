@@ -1,7 +1,11 @@
 ﻿function saveFile(fileDataRaw, Url) {
     var fileData = new FormData();
-   
-    fileData.append(fileDataRaw.name, fileDataRaw);
+
+    if (fileDataRaw != null) {
+        fileData.append(fileDataRaw.name, fileDataRaw);
+    }
+
+    
 
     var spsite = getUrlVars()["SPHostUrl"];
     Url = Url + "?SPHostUrl=" + spsite; 

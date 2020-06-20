@@ -70,18 +70,7 @@ namespace IntranetWeb.BAL.Intranet
         }
 
 
-        public string UploadDocument(ClientContext clientContext, HttpPostedFileBase files, string ItemData)
-        {
 
-            return RESTUploadFile(clientContext, files, ItemData);
-        }
-        private string RESTUploadFile(ClientContext clientContext, HttpPostedFileBase files, string ItemData)
-        {
-
-            RestService restService = new RestService();
-
-            return restService.UploadDocumentIntranet(clientContext, "INT_ImageLibrary", files, ItemData);
-        }
     }
 
 }

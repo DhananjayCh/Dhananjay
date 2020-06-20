@@ -46,10 +46,10 @@ CommonAppUtility.service('CommonAppUtilityService', function ($http, $q) {
             processData: false, // Not to process data
             data: fileData,
             success: function (result) {
-                alert(result);
+                return result;
             },
             error: function (err) {
-                alert(err.statusText);
+               return err.statusText;
             }
         });
 

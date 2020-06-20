@@ -6820,13 +6820,15 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
     value: function toggle() {
       this.$editor.toggleClass('fullscreen');
 
-      if (this.isFullscreen()) {
+        if (this.isFullscreen()) {
+            $("#exampleModalRight").find('.modal-dialog').addClass('fullScreenPopup');
         this.$editable.data('orgHeight', this.$editable.css('height'));
         this.$editable.data('orgMaxHeight', this.$editable.css('maxHeight'));
         this.$editable.css('maxHeight', '');
         this.$window.on('resize', this.onResize).trigger('resize');
         this.$scrollbar.css('overflow', 'hidden');
-      } else {
+        } else {
+            $("#exampleModalRight").find('.modal-dialog').removeClass('fullScreenPopup');
         this.$window.off('resize', this.onResize);
         this.resizeTo({
           h: this.$editable.data('orgHeight')
