@@ -181,6 +181,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BAL\EmployeeManagement\Emp_BasicInfoBal.cs" />
     <Compile Include="BAL\Intranet\INT_ArticleTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_AwardTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_AwardTypeMasterBal.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeManagement\Emp_BasicInfoModel.cs" />
     <Compile Include="Models\Intranet\INT_ArticleTxModel.cs" />
     <Compile Include="Models\Intranet\INT_AwardTxModel.cs" />
     <Compile Include="Models\Intranet\INT_AwardTypeMasterModel.cs" />

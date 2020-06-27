@@ -12,6 +12,7 @@ namespace IntranetWeb.Models.Intranet
         public string Emp_Code { get; set; }
         public string Reason { get; set; }
         public Emp_IdChild Emp_Id { get;set;}
+        public int Emp_IdId { get; set; }
         public bool Pinned_Awards { get; set; }
         public bool Active { get; set; }
     }

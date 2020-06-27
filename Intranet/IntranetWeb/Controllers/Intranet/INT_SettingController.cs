@@ -1,5 +1,7 @@
-﻿using IntranetWeb.BAL.Intranet;
+﻿using IntranetWeb.BAL.EmployeeManagement;
+using IntranetWeb.BAL.Intranet;
 using IntranetWeb.DAL;
+using IntranetWeb.Models.EmployeeManagement;
 using IntranetWeb.Models.Intranet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,9 +21,12 @@ namespace IntranetWeb.Controllers.Intranet
         INT_EventTxBal BalEvent = new INT_EventTxBal();
         INT_SliderTxBal BalSlider = new INT_SliderTxBal();
         INT_AwardTxBal BalAward = new INT_AwardTxBal();
+        INT_AwardTypeMasterBal BalAwardType = new INT_AwardTypeMasterBal();
         INT_PhotoGalleryTxBal BalPhotoGallery = new INT_PhotoGalleryTxBal();
         INT_PhotoGalleryChildTxBal BalPhotoGalleryChild = new INT_PhotoGalleryChildTxBal();
         INT_CommanFu BalCommon = new INT_CommanFu();
+        Emp_BasicInfoBal BalEmp_BasicInfo = new Emp_BasicInfoBal();
+        INT_SettingBal BalSetting = new INT_SettingBal();
 
 
         public ActionResult Index()
@@ -99,6 +104,19 @@ namespace IntranetWeb.Controllers.Intranet
 
         }
 
+        public JsonResult getAwardsTypeData()
+        {
+            List<INT_AwardTypeMasterModel> awardTypeData = new List<INT_AwardTypeMasterModel>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+
+                awardTypeData = BalAwardType.GetAwardTypeData(clientContext);
+                return Json(awardTypeData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
         public JsonResult getGalleryData()
         {
             List<INT_PhotoGalleryTxModel> galleryData = new List<INT_PhotoGalleryTxModel>();
@@ -123,6 +141,78 @@ namespace IntranetWeb.Controllers.Intranet
                 return Json(galleryData, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+        public JsonResult getSetting(string setting)
+        {
+            List<INT_SettingModel> settingData = new List<INT_SettingModel>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+
+                settingData = BalSetting.GetSettingData(clientContext, setting);
+                return Json(settingData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult getEmployee()
+        {
+            List<Emp_BasicInfoModel> empData = new List<Emp_BasicInfoModel>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+
+                empData = BalEmp_BasicInfo.GetEmp(clientContext);
+                return Json(empData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult SaveAwards(INT_AwardTxModel Award)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Award_type': '" + Award.Award_type + "'";
+                itemdata += " ,'Emp_Code': '" + Award.Emp_Code + "'";
+                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
+                itemdata += " ,'Reason': '" + Award.Reason + "'";
+                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
+                itemdata += " ,'Active': '" + Award.Active + "'";
+
+                returnID = BalAward.SaveAwards(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateAwards(INT_AwardTxModel Award)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Award_type': '" + Award.Award_type + "'";
+                itemdata += " ,'Emp_Code': '" + Award.Emp_Code + "'";
+                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
+                itemdata += " ,'Reason': '" + Award.Reason + "'";
+                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
+                itemdata += " ,'Active': '" + Award.Active + "'";
+
+                returnID = BalAward.UpdateAwards(clientContext, itemdata, Convert.ToString(Award.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SaveArticleData(INT_ArticleTxModel article)
@@ -509,6 +599,100 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 returnID = BalPhotoGalleryChild.DeletePhotoGalleryChild(clientContext, Id);
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateBirthdaySet(INT_SettingModel birthData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Before_Event': '" + birthData.Before_Event + "'";
+                itemdata += " ,'After_Event': '" + birthData.After_Event + "'";
+                itemdata += " ,'Show_Card_Title': '" + birthData.Show_Card_Title + "'";
+                if (birthData.Show_Card_Title)
+                {
+                    itemdata += " ,'Card_Title': '" + birthData.Card_Title + "'";
+                }
+                itemdata += " ,'Background_Color': '" + birthData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + birthData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateAnniversarySet(INT_SettingModel anniversaryData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Before_Event': '" + anniversaryData.Before_Event + "'";
+                itemdata += " ,'After_Event': '" + anniversaryData.After_Event + "'";
+                itemdata += " ,'Show_Card_Title': '" + anniversaryData.Show_Card_Title + "'";
+                if (anniversaryData.Show_Card_Title)
+                {
+                    itemdata += " ,'Card_Title': '" + anniversaryData.Card_Title + "'";
+                }
+                itemdata += " ,'Background_Color': '" + anniversaryData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + anniversaryData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(anniversaryData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateCardSet(List<INT_SettingModel> cardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                foreach (INT_SettingModel item in cardData)
+                {
+                    string itemdata = " 'Squence': '" + item.Squence + "'";
+                    itemdata += " ,'Active': '" + item.Active + "'";
+                    returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(item.ID));
+                }
+
+                //returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateAwardSet(INT_SettingModel awardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " ,'Background_Color': '" + awardData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + awardData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(awardData.ID));
                 if (returnID != "0")
                     obj.Add("OK");
             }

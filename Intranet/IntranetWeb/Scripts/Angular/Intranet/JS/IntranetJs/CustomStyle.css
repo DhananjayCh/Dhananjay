@@ -13,6 +13,32 @@ body {
     height: 84px!important;
     width: 84px!important;
 }
+.sp-container {
+    z-index: 9999999 !important;
+}
+
+.event-cards-fixedHeight {
+    height: 170px !important;
+}
+
+.avatar-Profile-User {
+    width: 84px !important;
+    height: 84px !important;
+    font-size: 36px !important;
+}
+.bg-primary-gradient {
+    background-image: linear-gradient(to left, #fbb734 0%, #ffa800 100%) !important;
+}
+
+.bg-danger-gradient {
+    background-image: linear-gradient(45deg, #089287, #0aa699) !important;
+}
+.bg-purple-gradient {
+    background-image: linear-gradient(to right, #673ab7 0%, #884af1 100%) !important;
+}
+.pointerCursor {
+    cursor: pointer !important;
+}
 /******** right ribbion start *************/
 .ribbon {
     position: relative;
@@ -214,4 +240,52 @@ ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner:after, .ribbon.ribb
 .tooltip {
     z-index: 100000000!important;
 }
+.bottom-border {
+    border-bottom: 1px solid lightgray !important;
+}
 /**********Fixed Hight End*************/
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+    .separator::before, .separator::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #ffd700;
+    }
+
+    .separator::before {
+        margin-right: .25em;
+    }
+
+    .separator::after {
+        margin-left: .25em;
+    }
+.trophy_Color {
+    color: #FFD700;
+    font-size: 16px;
+}
+.font_award {
+    font-family: initial;
+    font-style: italic;
+    font-weight: bold;
+}
+#global-loaderPopup {
+    position: fixed;
+    z-index: 50000;
+    background: #fff;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+#global-loaderPopup {
+    display:none;
+}
