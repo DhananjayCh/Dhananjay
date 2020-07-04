@@ -188,6 +188,7 @@
     <Compile Include="BAL\Intranet\INT_CommanFu.cs" />
     <Compile Include="BAL\Intranet\INT_EventTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_HolidayListBal.cs" />
+    <Compile Include="BAL\Intranet\INT_NavigationMenuBal.cs" />
     <Compile Include="BAL\Intranet\INT_NoticeTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_PagesTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_PhotoGalleryChildTxBal.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\Intranet\INT_AwardTypeMasterModel.cs" />
     <Compile Include="Models\Intranet\INT_EventTxModel.cs" />
     <Compile Include="Models\Intranet\INT_HolidayListModel.cs" />
+    <Compile Include="Models\Intranet\INT_NavigationMenuModel.cs" />
     <Compile Include="Models\Intranet\INT_NoticeTxModel.cs" />
     <Compile Include="Models\Intranet\INT_PagesTxModel.cs" />
     <Compile Include="Models\Intranet\INT_PhotoGalleryChildTxModel.cs" />

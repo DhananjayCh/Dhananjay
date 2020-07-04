@@ -13,5 +13,6 @@ namespace IntranetWeb.Models.Intranet
         public string Page_Type { get; set; }
         public string Page_Content { get; set; }
         public string Widget_Configuration { get; set; }
+        public bool Active { get; set; }
     }
 }

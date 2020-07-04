@@ -14,6 +14,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $scope.SettingData = [];
     $scope.SelectPinnedData = [];
     $scope.widgetCollection = [];
+    $scope.PagesData = [];
 
     var noticeDoc = {};
 
@@ -246,8 +247,53 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             });
 
         })
+    }
 
+    function getPagesData(loadFresh) {
+        console.log(new Date());
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getPagesData", '').then(function (response) {
+                console.log(new Date());
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.PagesData = response.data;
+                        $('#PageDataTable').DataTable().clear();
+                        $('#PageDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('PageDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
 
+            });
+
+        })
+    }
+
+    function getNavigationMenuData(loadFresh) {
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getNavigationMenuData", '').then(function (response) {
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.MenuData = response.data;
+                        console.log($scope.MenuData)
+                        $('#MenuDataTable').DataTable().clear();
+                        $('#MenuDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('MenuDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
+
+            });
+
+        })
     }
 
 
@@ -474,8 +520,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             getAward(true);
         } else if ($(this).attr('data-title') == "Photo Gallery") {
             getGallery(true);
+        } else if ($(this).attr('data-title') == "Pages") {
+            getPagesData(true);
+        } else if ($(this).attr('data-title') == "Menu") {
+            getNavigationMenuData(true);
         } else {
-            $("#global-loader").fadeOut("slow");
+            $("#global-loader").fadeOut("slow"); 
         }
     })
 
@@ -484,9 +534,17 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         if (tab_Clicked == "Award") {
             oprnPopupByClick(tab_Clicked, createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true), createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', false, true));
         } else if (tab_Clicked == "Pages") {
+            $scope.widgetCollection = [];
             getSettingBy().then(function (response) {
                 var dropData = createDropdownData(response, 'Setting_For', 'Setting_For', '', true, true);
                 oprnPopupByClick(tab_Clicked, dropData);
+            });
+        } else if (tab_Clicked == "Menu") {
+            $scope.widgetCollection = [];
+            getPagesData(false).then(function (response) {
+                var dropData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
+                var dropData1 = createDropdownData($scope.MenuData, 'ID', 'MenuName', '', true, true);
+                oprnPopupByClick(tab_Clicked, dropData, dropData1);
             });
         } else {
             oprnPopupByClick(tab_Clicked);
@@ -584,9 +642,161 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             saveCardSetting('edit');
         } else if ($(this).attr('data-saveType') == "Award_SettingPop") {
             saveAwardetting('edit');
+        } else if ($(this).attr('data-saveType') == "Pages") {
+            if ($(this).attr('data-operation') == "Save") {
+                savePages('save');
+            } else if ($(this).attr('data-operation') == "edit") {
+                savePages('edit');
+            }
+        } else if ($(this).attr('data-saveType') == "Menu") {
+            if ($(this).attr('data-operation') == "Save") {
+                saveMenu('save');
+            } else if ($(this).attr('data-operation') == "edit") {
+                saveMenu('edit');
+            }
         }
 
     });
+
+/**********************Menu Operation start***************************/
+    $(document).on('click', '#IsInternalUrl', function () {
+        if ($(this).hasClass('on')) {
+            $("#Internal_Pages_Div").show();
+            $("#Menu_Url_Div").hide();
+        } else {
+            $("#Internal_Pages_Div").hide();
+            $("#Menu_Url_Div").show();
+        }
+    })
+
+    $(document).on('click', '#IsChildMenu', function () {
+        if ($(this).hasClass('on')) {
+            $("#Parent_Menu_Div").show();
+        } else {
+            $("#Parent_Menu_Div").hide();
+        }
+    })
+
+    function saveMenu(processType) {
+
+        var articleValidateArray = [
+            { 'id': 'Menu_Title', 'message': 'Please Enter Menu Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+
+
+        ]
+        if (validateSave(articleValidateArray)) {
+            $("#exampleModalRight").modal('hide');
+            $("#global-loader").fadeIn("slow");
+            callMenu(processType);
+
+        }
+
+    }
+
+    function callMenu(type) {
+        var IsInternalUrl = $('#IsInternalUrl').hasClass('on');
+        var IsChildMenu = $('#IsChildMenu').hasClass('on');
+        var Next_Tab = $('#Next_Tab').hasClass('on');
+        var activeData = $('#active_Check').hasClass('on');
+        var finalUrl = "#";
+        if (IsInternalUrl) {
+            finalUrl = "/SitePages/ViewAllNotice.aspx?" + $("#Internal_Pages").val();
+        } else {
+            finalUrl = $("#Menu_URL").val()
+        }
+        var Pid = 0;
+        if (IsChildMenu) {
+            Pid = parseInt($("#ParentMenuSelect").val());
+        }
+
+        var data = {
+            'MenuName': $("#Menu_Title").val(),
+            'URL': finalUrl,
+            'OrderNo': parseInt($("#Menu_Order").val()),
+            'External_Url': !IsInternalUrl,
+            'Next_Tab': Next_Tab,
+            'ParentMenuIdId': Pid,
+            'Active': activeData,
+        }
+
+        if (type == "edit") {
+            data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+            console.log("PageData");
+            console.log(data);
+            CommonAppUtilityService.CreateItem("/INT_Setting/SaveNavigationMenuData", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getNavigationMenuData(true);
+                }
+
+            });
+        } else {
+            console.log("PageData");
+            console.log(data);
+            CommonAppUtilityService.CreateItem("/INT_Setting/SaveNavigationMenuData", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getNavigationMenuData(true);
+                }
+
+            });
+        }
+    }
+
+/**********************Menu Operation end***************************/
+
+    function savePages(processType) {
+
+        var articleValidateArray = [
+            { 'id': 'Page_Name', 'message': 'Please Enter Page Name', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'Page_Title', 'message': 'Please Enter Page Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'note-editable', 'message': 'Please Enter Page Content', 'type': 'richtextbox', 'selector_Type': 'class', 'parent_Id': 'note-editor' },
+
+        ]
+        if (validateSave(articleValidateArray)) {
+            $("#exampleModalRight").modal('hide');
+            $("#global-loader").fadeIn("slow");
+            callPages(processType);
+
+        }
+
+    }
+
+    function callPages(type) {
+        var activeData = $('#active_Check').hasClass('on');
+        var data = {
+            'Page_Name': $("#Page_Name").val(),
+            'Page_Title': $("#Page_Title").val(),
+            'Page_Type': $("#Page_Type").val(),
+            'Page_Content': $('.note-editable').html(),
+            'Widget_Configuration': JSON.stringify($scope.widgetCollection) ,
+            'Active': activeData,
+        }
+
+        if (type == "edit") {
+            data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+            console.log("PageData");
+            console.log(data);
+            CommonAppUtilityService.CreateItem("/INT_Setting/UpdatePages", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getPagesData(true);
+                }
+
+            });
+        } else {
+            console.log("PageData");
+            console.log(data);
+            CommonAppUtilityService.CreateItem("/INT_Setting/SavePages", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getPagesData(true);
+                }
+
+            });
+        }
+    }
+
 
     function saveAwardetting() {
 
@@ -1326,6 +1536,19 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 inilizeEditpopUp(a, openFor);
             });
 
+        } else if (openFor == "Pages") {
+            $("#global-loader").fadeIn("slow");
+            getSettingBy().then(function (response) {
+                $("#global-loader").fadeOut("slow");
+                a.SettDropData = createDropdownData(response, 'Setting_For', 'Setting_For', '', true, true);
+                $scope.widgetCollection = [];
+                var widgetData = JSON.parse(a.Widget_Configuration);
+                if (widgetData.length > 0) {
+                    $scope.widgetCollection = $scope.widgetCollection.concat(widgetData);
+                    a.widgetBody = createTableBodyW(widgetData);
+                }
+                inilizeEditpopUp(a, openFor);
+            });
         } else {
             inilizeEditpopUp(a, openFor);
             console.log(a);

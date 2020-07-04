@@ -10,10 +10,11 @@ var popupData = [
     { 'popup_For': 'Card_SettingPop', 'modelBody': '<div class="row row-sm"><div class="col-lg-12 bottom-border"><label for="Birthday_Setting"><h3>Cards Setting</h3><span class="text-muted card-sub-title">(Please click on save after your chnages, So changes get reflected)</span></label></div><div class="col-lg-12 pd-t-15"><div class="table-responsive"><table class="table mg-b-0 text-md-nowrap"><thead><tr><th>#</th><th>Card Name</th><th>Sequnce</th><th>Active</th></tr></thead><tbody Id="card_Tbody"></tbody></table></div></div></div>' },
     { 'popup_For': 'Award_SettingPop', 'modelBody': '<div class="row row-sm"><div class="col-lg-12 bottom-border"><label for="Award_Setting"><h3>Award Setting</h3><span class="text-muted card-sub-title">(Please click on save after your chnages, So changes get reflected)</span></label></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label class="mg-r-10" for="bg_color">Background color</label><input class="colorpicker" data-for="bg" id="colorpicker1" type="text"></div></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label class="mg-r-10" for="font_color">Font color</label><input class="colorpicker" data-for="font" id="colorpicker2" type="text"></div></div><div class="col-lg-12"><div class="form-group"><label for="Preview">Card Preview</label></div></div><div class="col-lg-12"><div class="card bg-purple-gradient" id="cardStructure"><div class="card-body"><div id="myCarousel" class="carousel slide" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active flex-column"><div class="row"><div class="col-lg-12"><div class="separator"><h4 class="text-white font-light font_award"><i class="fas fa-trophy trophy_Color"></i> Employee of the month <i class="fas fa-trophy trophy_Color"></i></h4></div></div><div class="col-lg-4 mg-x-auto"><div class="widget-user-image"><div class="avatar avatar-Profile-User d-sm-flex bg-danger rounded-circle">VS</div></div></div><div class="col-lg-8 text-white" id="cardStructureFont"><h4 class="font-light">Vijay Shere</h4><p class="mt-2 description-text-fixed-3line">Due to your incredible performance in Development area, Company like to award you.</p></div></div></div></div></div></div></div></div></div>' },
     { 'popup_For': 'Event_SettingPop', 'modelBody': '<div class="row row-sm"><div class="col-lg-12 bottom-border"><label for="Event_Setting"><h3>Event Setting</h3><span class="text-muted card-sub-title">(Please click on save after your chnages, So changes get reflected)</span></label></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label for="Start_Before">Show Before Date</label><input type="text" class="form-control" id="Start_Before" placeholder="Enter days"></div></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label for="Start_After">Show After Date</label><input type="text" class="form-control" id="Start_After" placeholder="Enter days"></div></div></div>' },
-    { 'popup_For': 'Pages', 'modelBody': '<div class="row row-sm"><div class="col-lg-12"><div class="form-group"><label for="Page_Name">Page Name</label><input type="text" class="form-control" id="Page_Name" placeholder="Page Name"><label for="Page_NameUrl" class="text-muted card-sub-title">(Page Url(eg.) :- www.demosite.com/pages.aspx?<span id="url_Created"></span>)</label></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Title">Page Title</label><input type="text" class="form-control" id="Page_Title" placeholder="Page_Title"></div></div><div class="col-lg-12"><div class="form-group"><label for="Last_Name">Page Content</label><div id="summernote"></div></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Type">Page Type</label><select class="form-control select3" id="Page_Type"><option label="Choose one"></option><option value="Full Page Content">Full Page Content</option><option value="Right Page Content">Right Page Content</option><option value="Left Page Content">Left Page Content</option></select></div></div><div class="col-lg-5" id="Widget_Div" style="display:none"><div class="form-group"><label for="Widget Name">Widget Name</label><select class="form-control select3" id="Widget_Name"></select></div></div><div class="col-lg-6" id="Pinned_Content_Div" style="display:none"><div class="form-group"><label for="Page_Type">Select To Pinned</label><select class="form-control multiSelectDrop" id="Pinned_Content" multiple="multiple"></select></div></div><div class="col-lg-1 margin_T_B_A" id="widgetAddRow" style="display:none"><i class="fas fa-plus text-primary mr-2 pointerCursor" id="widgetAddClick" data-toggle="tooltip" title="Add" data-placement="top" data-original-title="Add"></i></div><div class="col-lg-12" id="widgetTable" style="display:none"><div class="table-responsive"><table class="table mg-b-0 text-md-nowrap"><thead><tr><th>#</th><th>Widget Name</th><th>Sequence</th><th>Pinned Item</th><th>Action</th></tr></thead><tbody id="widgetTrBody"></tbody></table></div></div><div class="col-lg-12"><button type="button" class="btn btn-primary" id="previewBtn">Preview</button></div></div>' },
+    { 'popup_For': 'Pages', 'modelBody': '<div class="row row-sm"><div class="col-lg-12"><div class="form-group"><label for="Page_Name">Page Name</label><input type="text" class="form-control" id="Page_Name" placeholder="Page Name"><label for="Page_NameUrl" class="text-muted card-sub-title">(Page Url(eg.) :- www.demosite.com/pages.aspx?<span id="url_Created"></span>)</label></div></div><div class="col-lg-6"><div class="form-group"><label for="Page_Title">Page Title</label><input type="text" class="form-control" id="Page_Title" placeholder="Page_Title"></div></div><div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="Active">Active</label><div class="main-toggle mg-l-20" id="active_Check"><span></span></div></div></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Content">Page Content</label><div id="summernote"></div></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Type">Page Type</label><select class="form-control select3" id="Page_Type"><option label="Choose one"></option><option value="Full Page Content">Full Page Content</option><option value="Right Page Content">Right Page Content</option><option value="Left Page Content">Left Page Content</option></select></div></div><div class="col-lg-5" id="Widget_Div" style="display:none"><div class="form-group"><label for="Widget Name">Widget Name</label><select class="form-control select3" id="Widget_Name"></select></div></div><div class="col-lg-6" id="Pinned_Content_Div" style="display:none"><div class="form-group"><label for="Page_Type">Select To Pinned</label><select class="form-control multiSelectDrop" id="Pinned_Content" multiple="multiple"></select></div></div><div class="col-lg-1 margin_T_B_A" id="widgetAddRow" style="display:none"><i class="fas fa-plus text-primary mr-2 pointerCursor" id="widgetAddClick" data-toggle="tooltip" title="Add" data-placement="top" data-original-title="Add"></i></div><div class="col-lg-12" id="widgetTable" style="display:none"><div class="table-responsive"><table class="table mg-b-0 text-md-nowrap"><thead><tr><th>#</th><th>Widget Name</th><th>Sequence</th><th>Pinned Item</th><th>Action</th></tr></thead><tbody id="widgetTrBody"></tbody></table></div></div><div class="col-lg-12"><button type="button" class="btn btn-primary" id="previewBtn">Preview</button></div></div>' },
+    { 'popup_For': 'Menu', 'modelBody': '<div class="row row-sm"> <div class="col-lg-12"><div class="form-group"><label for="Menu_Title">Menu Title</label><input type="text" class="form-control" id="Menu_Title" placeholder="Enter Menu Title" /></div></div> <div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="IsInternalUrl">Is This Internal Url</label><div class="main-toggle mg-l-20" id="IsInternalUrl"><span></span></div></div></div></div> <div class="col-lg-6" id="Internal_Pages_Div" style="display:none"><div class="form-group"><label for="Internal_Pages">Internal Pages</label><select class="form-control select2" id="Internal_Pages"><option label="Choose one"></option><option value="Employee 1">Page 1</option></select></div></div> <div class="col-lg-12" id="Menu_Url_Div"><div class="form-group"><label for="Menu_URL">URL</label><input type="text" class="form-control" id="Menu_URL" placeholder="Enter Url" /></div></div> <div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="Article_Pinned">Is This Child Menu</label><div class="main-toggle mg-l-20" id="IsChildMenu"><span></span></div></div></div></div> <div class="col-lg-6" id="Parent_Menu_Div" style="display:none"><div class="form-group"><label for="Parent_Menu">Parent Menu</label><select class="form-control select2" id="ParentMenuSelect"><option label="Choose one"></option><option value="Employee 1">Employee 1</option></select></div></div> <div class="col-lg-12"><div class="form-group"><label for="Menu_Order">Order</label><input type="text" class="form-control" id="Menu_Order" placeholder="Enter Menu_Order" /></div></div> <div class="col-lg-6"><div class="form-group"><div class="main-toggle-group-demo yes-toggle"><label for="Next_Tab">Open in Next Tab</label><div class="main-toggle mg-l-20" id="Next_Tab"><span></span></div></div></div></div> <div class="col-lg-6"><div class="form-group"><div class="main-toggle-group-demo yes-toggle"><label for="Active">Active</label><div class="main-toggle mg-l-20" id="active_Check"><span></span></div></div></div></div></div>' },
 ]
 
-
+   
 
 var fileDataBuffer = [];
 
@@ -32,6 +33,9 @@ function oprnPopupByClick(tab_Clicked, dpData, dpData1) {
             $("#Award_Type").empty().append(dpData1);
         } else if (tab_Clicked == "Pages") {
             $("#Widget_Name").empty().append(dpData);
+        } else if (tab_Clicked == "Menu") {
+            $("#Internal_Pages").empty().append(dpData);
+            $("#ParentMenuSelect").empty().append(dpData1);
         }
         inilizeRichTxetEditorInput();
         bindFancyUpload();
@@ -60,9 +64,10 @@ function inilizeEditpopUp(data, tab_Clicked) {
     bindEdit(data, tab_Clicked);
     inilizeRichTxetEditorInput();
     iniliazeSelect2();
-
     bindFancyUpload();
     inilizeFileUploader();
+    iniliazeSelect3();
+    iniliazeMultiSelectDrop();
     $('.note-editable').find('img').each(function (index, d) {
         var urlD = decodeURIComponent(getUrlVars()["SPHostUrl"]).split('/sites/')[0];
         $(this).attr('src', urlD + $(this).attr('src'));
@@ -213,7 +218,24 @@ function bindEdit(data, bindFor) {
     } else if (bindFor == "Event_SettingPop") {
         $("#Start_Before").val(data.Before_Event);
         $("#Start_After").val(data.After_Event);
-    }
+    } else if (bindFor == "Pages") {
+
+        $("#Page_Name").val(data.Page_Name);
+        $("#url_Created").empty().append(data.Page_Name);
+        $("#Page_Title").val(data.Page_Title);
+        $("#Page_Type").val(data.Page_Type);
+        if (data.Page_Type != "Full Page Content") {
+            $("#widgetTrBody").empty().append(data.widgetBody);
+            $("#widgetTable").show();
+            $("#Widget_Div").show();
+            $("#widgetAddRow").show();
+        }
+        if (data.Active) {
+            $('#active_Check').addClass('on')
+        }
+
+        $("#summernote").html(data.Page_Content);
+    } 
 }
 
 

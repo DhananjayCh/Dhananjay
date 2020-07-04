@@ -71,7 +71,8 @@
                                 <li data-title="Slider">Slider</li>
                                 <li data-title="Awards">Awards</li>
                                 <li data-title="Photo Gallery">Photo Gallery</li>
-                                <li data-title="Page">Page</li>
+                                <li data-title="Pages">Page</li>
+                                <li data-title="Menu">Menu</li>
                                 <li data-title="Settings">Settings</li>
                             </ul>
                             <div class="content_wrapper">
@@ -368,27 +369,26 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="border-bottom-0">ID</th>
-                                                            <th class="border-bottom-0">Album Title</th>
-                                                            <th class="border-bottom-0">Pinned Album</th>
+                                                            <th class="border-bottom-0">Page Name</th>
+                                                            <th class="border-bottom-0">Page Title</th>
+                                                            <th class="border-bottom-0">Page Type</th>
                                                             <th class="border-bottom-0">Active</th>
                                                             <th class="border-bottom-0">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="g in PageData">
-                                                            <td>{{g.ID}}</td>
-                                                            <td>{{g.Album_Title}}</td>
+                                                        <tr ng-repeat="pg in PagesData">
+                                                            <td>{{pg.ID}}</td>
+                                                            <td>{{pg.Page_Name}}</td>
+                                                            <td>{{pg.Page_Title}}</td>
+                                                            <td>{{pg.Page_Type}}</td>
                                                             <td>
-                                                                <span class="badge badge-success" ng-show={{g.Pinned_Album}}>Yes</span>
-                                                                <span class="badge badge-danger" ng-show=!{{g.Pinned_Album}}>No</span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="badge badge-success" ng-show={{g.Active}}>Yes</span>
-                                                                <span class="badge badge-danger" ng-show=!{{g.Active}}>No</span>
+                                                                <span class="badge badge-success" ng-show={{pg.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{pg.Active}}>No</span>
                                                             </td>
                                                             <td>
                                                                 <div class="btn-icon-list">
-                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(g,'Gallery')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(pg,'Pages')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -396,8 +396,55 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12" id="testgalId">
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Menu">Add</button>
+                                        </div>
 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="MenuDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">ID</th>
+                                                            <th class="border-bottom-0">Menu Name</th>
+                                                            <th class="border-bottom-0">Menu Order</th>
+                                                            <th class="border-bottom-0">URL</th>
+                                                            <th class="border-bottom-0">External Url</th>
+                                                            <th class="border-bottom-0">Parent Menu</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="Me in MenuData">
+                                                            <td>{{Me.ID}}</td>
+                                                            <td>{{Me.MenuName}}</td>
+                                                            <td>{{Me.OrderNo}}</td>
+                                                            <td>{{Me.URL}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{Me.External_Url}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{Me.External_Url}}>No</span>
+                                                            </td>
+                                                            <td>{{Me.ParentMenuId.MenuName}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{Me.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{Me.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(Me,'Menu')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -450,25 +497,103 @@
 
             <div class="modal-content">
                 <div class="modal-body" style="overflow-y: scroll; max-height:90%;">
-                    <div class="row row-sm">
+                    @*<div class="row row-sm">
                         <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table class="table mg-b-0 text-md-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Widget Name</th>
-                                            <th>Pinned Item</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                            <div class="form-group">
+                                <label for="Menu_Title">Menu Title</label>
+                                <input type="text" class="form-control" id="Menu_Title" placeholder="Enter Menu Title">
                             </div>
                         </div>
 
-                    </div>
+                        <div class="col-lg-6 margin_T_B_A">
+                            <div class="form-group mg-b-0">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="IsInternalUrl">Is This Internal Url</label>
+                                    <div class="main-toggle mg-l-20" id="IsInternalUrl">
+                                        <span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="Internal_Pages_Div" style="display:none">
+                            <div class="form-group">
+                                <label for="Internal_Pages">Internal Pages</label>
+                                <select class="form-control select2" id="Internal_Pages">
+                                    <option label="Choose one"></option>
+                                    <option value="Employee 1">Page 1</option>
+                                    <option value="Employee 2">Page 2</option>
+                                    <option value="Employee 3">Page 3</option>
+                                    <option value="Employee 4">Page 4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12" id="Menu_Url_Div">
+                            <div class="form-group">
+                                <label for="Menu_URL">URL</label>
+                                <input type="text" class="form-control" id="Menu_URL" placeholder="Enter Url">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 margin_T_B_A">
+                            <div class="form-group mg-b-0">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Article_Pinned">Is This Child Menu</label>
+                                    <div class="main-toggle mg-l-20" id="IsChildMenu">
+                                        <span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="Parent_Menu_Div" style="display:none">
+                            <div class="form-group">
+                                <label for="Parent_Menu">Parent Menu</label>
+                                <select class="form-control select2" id="ParentMenuSelect">
+                                    <option label="Choose one"></option>
+                                    <option value="Employee 1">Employee 1</option>
+                                    <option value="Employee 2">Employee 2</option>
+                                    <option value="Employee 3">Employee 3</option>
+                                    <option value="Employee 4">Employee 4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="Menu_Order">Order</label>
+                                <input type="text" class="form-control" id="Menu_Order" placeholder="Enter Menu_Order">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Next_Tab">Open in Next Tab</label>
+                                    <div class="main-toggle mg-l-20" id="Next_Tab">
+                                        <span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Active">Active</label>
+                                    <div class="main-toggle mg-l-20" id="active_Check">
+                                        <span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>*@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveActionData" data-saveType="" data-operation="" data-updateId="">Save</button>
