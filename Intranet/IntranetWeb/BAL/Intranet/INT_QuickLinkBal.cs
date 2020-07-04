@@ -18,7 +18,8 @@ namespace IntranetWeb.BAL.Intranet
             JArray jArray = new JArray();
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
-            rESTOption.select = "ID,Quick_Link_Title,Quick_Link_Url,Active";
+            rESTOption.select = "ID,Quick_Link_Title,Quick_Link_Url,Active,Created,Author/Title";
+            rESTOption.expand = "Author";
             rESTOption.top = "5000";
 
 
@@ -26,10 +27,14 @@ namespace IntranetWeb.BAL.Intranet
             jArray = restService.GetAllItemFromList(clientContext, "INT_QuickLink", rESTOption);
             return jArray;
         }
-        public List<INT_QuickLinkModel> GetQuickLinkData(ClientContext clientContext)
+        public List<INT_QuickLinkModel> GetQuickLinkData(ClientContext clientContext, string filterData)
         {
             List<INT_QuickLinkModel> QuickLinkData = new List<INT_QuickLinkModel>();
             string filter = "";
+            if (filterData != null && filterData != "")
+            {
+                filter = filterData;
+            }
             JArray jArray = RESTGet(clientContext, filter);
             foreach (JObject j in jArray)
             {
@@ -38,6 +43,8 @@ namespace IntranetWeb.BAL.Intranet
                     ID = Convert.ToInt32(j["Id"]),
                     Quick_Link_Title = j["Quick_Link_Title"].ToString(),
                     Quick_Link_Url = j["Quick_Link_Url"].ToString(),
+                    Author = j["Author"]["Title"].ToString(),
+                    CreatedDate = j["Created"].ToString(),
                     Active = (bool)j["Active"],
                 }); ;
             }

@@ -189,6 +189,7 @@
     <Compile Include="BAL\Intranet\INT_EventTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_HolidayListBal.cs" />
     <Compile Include="BAL\Intranet\INT_NoticeTxBal.cs" />
+    <Compile Include="BAL\Intranet\INT_PagesTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_PhotoGalleryChildTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_PhotoGalleryTxBal.cs" />
     <Compile Include="BAL\Intranet\INT_QuickLinkBal.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\Intranet\INT_EventTxModel.cs" />
     <Compile Include="Models\Intranet\INT_HolidayListModel.cs" />
     <Compile Include="Models\Intranet\INT_NoticeTxModel.cs" />
+    <Compile Include="Models\Intranet\INT_PagesTxModel.cs" />
     <Compile Include="Models\Intranet\INT_PhotoGalleryChildTxModel.cs" />
     <Compile Include="Models\Intranet\INT_PhotoGalleryTxModel.cs" />
     <Compile Include="Models\Intranet\INT_QuickLinkModel.cs" />
@@ -556,6 +558,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\CustomStyle.css" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\DatePicker.js" />
+    <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\easy-ticker\jquery.easy-ticker.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\fancyuploder\cors\jquery.postmessage-transport.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\fancyuploder\cors\jquery.xdr-transport.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\fancyuploder\fancy-uploader.js" />
@@ -591,6 +594,8 @@
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\fileuploads\js\fileupload.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\form-editor.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\modelPopup.css" />
+    <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\MultiSelectDropDown\bootstrap-multiselect.css" />
+    <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\MultiSelectDropDown\bootstrap-multiselect.min.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\saveFileLib.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\Setting.js" />
     <Content Include="Scripts\Angular\Intranet\JS\IntranetJs\sp.core.js" />
@@ -8533,6 +8538,7 @@
     <Content Include="Scripts\Angular\DAL\CommonJs.js" />
     <Content Include="Scripts\Angular\DAL\DAL.js" />
     <Content Include="Scripts\Angular\DAL\Navigation.js" />
+    <Content Include="Scripts\Angular\Intranet\JS\WidgetController.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="assets\css\sidemenu.css.map" />

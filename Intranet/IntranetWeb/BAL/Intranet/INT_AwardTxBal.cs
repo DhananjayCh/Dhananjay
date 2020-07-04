@@ -28,10 +28,14 @@ namespace IntranetWeb.BAL.Intranet
             jArray = restService.GetAllItemFromList(clientContext, "INT_AwardTx", rESTOption);
             return jArray;
         }
-        public List<INT_AwardTxModel> GetAwardData(ClientContext clientContext)
+        public List<INT_AwardTxModel> GetAwardData(ClientContext clientContext, bool filterOn)
         {
             List<INT_AwardTxModel> AwardData = new List<INT_AwardTxModel>();
             string filter = "";
+            if (filterOn)
+            {
+                filter = "(Pinned_Awards eq '1')";
+            }
             JArray jArray = RESTGet(clientContext, filter);
             
             //

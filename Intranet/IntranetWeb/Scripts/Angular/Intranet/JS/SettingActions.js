@@ -1,166 +1,255 @@
-﻿var settingApp = angular.module('settingApp', ['CommonAppUtility'])
+﻿var settingApp = angular.module('settingApp', ['CommonAppUtility','widgetapp'])
 
-settingApp.controller('settingController', function ($scope, $http, CommonAppUtilityService) {
+settingApp.controller('settingController', function ($scope, $http, $compile, CommonAppUtilityService) {
     $scope.NoticeData = [];
     $scope.ArticleData = [];
     $scope.EventData = [];
     $scope.SliderData = [];
     $scope.AwardData = [];
     $scope.GalleryData = [];
+    $scope.QuickLinkData = [];
     $scope.allEmpData = [];
     $scope.awardType = [];
+    $scope.PageData = [];
+    $scope.SettingData = [];
+    $scope.SelectPinnedData = [];
+    $scope.widgetCollection = [];
 
     var noticeDoc = {};
 
     $scope.urlfix = decodeURIComponent(getUrlVars()["SPHostUrl"]).split('/sites/')[0];
 
-    //var scriptBase = getParameterByName("SPHostUrl") + "/_layouts/15/";
-    //$.getScript(scriptBase + "MicrosoftAjax.js").then(function (data) {
-    //    return $.getScript(scriptbase + "SP.Runtime.js");
-    //}).then(function (data) {
-    //    return $.getScript(scriptbase + "SP.js");
-    //}).then(function (data) {
-    //    return $.getScript(scriptbase + "SP.UI.Dialog.js");
-    //}).then(function (data) {
-    //    $.getScript(scriptBase + "SP.RequestExecutor.js");
-    //        }).then(function (data) {
-
-    //        });
 
     $("#global-loader").fadeIn("slow");
-    getArticle();
+    getArticle(true);
     console.log(getParameterByName('SPHostUrl'));
-    function getArticle() {
-        //  $("#global-loader").fadeIn("slow");
+
+    /*var datam = [
+        { ID: 1 },
+        { ID: 2 },
+        { ID: 3 },
+        { ID: 4 },
+        { ID: 5 },
+    ]
+    CommonAppUtilityService.CreateItem("/INT_Setting/getQuicklink", datam).then(function (response) {
+        console.log(response);
+    });*/
+
+
+    function getQuickLink(loadFresh) {
         console.log(new Date());
-        CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", '').then(function (response) {
-            console.log(new Date());
-            if (response.status == 200) {
-                $scope.ArticleData = response.data;
-                $('#ArticleDataTable').DataTable().clear();
-                $('#ArticleDataTable').DataTable().destroy();
-                setTimeout(function () {
-                    $scope.$apply();
-                    bindDataTable('ArticleDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);
-            }
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getQuicklink", '').then(function (response) {
+                console.log(new Date());
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.QuickLinkData = response.data;
+                        $('#QuickLinkDataTable').DataTable().clear();
+                        $('#QuickLinkDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('QuickLinkDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
 
-        });
+            });
+
+        })
+
     }
 
-    function getNotice() {
+    function getArticle(loadFresh) {
+        console.log(new Date());
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", '').then(function (response) {
+                console.log(new Date());
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.ArticleData = response.data;
+                        $('#ArticleDataTable').DataTable().clear();
+                        $('#ArticleDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('ArticleDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
+
+            });
+
+        })
+
+    }
+
+
+    function getNotice(loadFresh) {
         //$("#global-loader").fadeIn("slow");
-        CommonAppUtilityService.CreateItem("/INT_Setting/getNoticeData", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.NoticeData = response.data;
-                $('#NoticeDataTable').DataTable().clear();
-                $('#NoticeDataTable').DataTable().destroy();
-                setTimeout(function () {
-                    bindDataTable('NoticeDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getNoticeData", '').then(function (response) {
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.NoticeData = response.data;
+                        $('#NoticeDataTable').DataTable().clear();
+                        $('#NoticeDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            bindDataTable('NoticeDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
 
-            }
-            console.log(response);
-        });
+                }
+                console.log(response);
+            });
+
+        })
+
+       
     }
 
-    function getEvent() {
+    function getEvent(loadFresh) {
         // $("#global-loader").fadeIn("slow");
-        CommonAppUtilityService.CreateItem("/INT_Setting/getEventData", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.EventData = response.data;
-                $('#EventDataTable').DataTable().clear();
-                $('#EventDataTable').DataTable().destroy();
-                setTimeout(function () {
-                    $scope.$apply();
-                    bindDataTable('EventDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);
 
-            }
-            console.log(response);
-        });
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getEventData", '').then(function (response) {
+                if (response.status == 200) {
+
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.EventData = response.data;
+                        $('#EventDataTable').DataTable().clear();
+                        $('#EventDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('EventDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+
+                }
+                console.log(response);
+            });
+
+        })
+
+
     }
 
-    function getSlider() {
+    function getSlider(loadFresh) {
         // $("#global-loader").fadeIn("slow");
-        CommonAppUtilityService.CreateItem("/INT_Setting/getSiderData", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.SliderData = response.data;
-                $('#SliderDataTable').DataTable().clear();
-                $('#SliderDataTable').DataTable().destroy();
-                setTimeout(function () {
-                    $scope.$apply();
-                    bindDataTable('SliderDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);
 
-            }
-            console.log(response);
-        });
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getSiderData", '').then(function (response) {
+                if (response.status == 200) {
+
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.SliderData = response.data;
+                        $('#SliderDataTable').DataTable().clear();
+                        $('#SliderDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('SliderDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+
+                }
+                console.log(response);
+            });
+
+        })
+
+
     }
 
-    function getGallery() {
+    function getGallery(loadFresh) {
         // $("#global-loader").fadeIn("slow");
-        CommonAppUtilityService.CreateItem("/INT_Setting/getGalleryData", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.GalleryData = response.data;
-                $('#GalleryDataTable').DataTable().clear();
-                $('#GalleryDataTable').DataTable().destroy();
-                setTimeout(function () {
-                    $scope.$apply();
-                    bindDataTable('GalleryDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);
 
-            }
-            console.log(response);
-        });
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getGalleryData", '').then(function (response) {
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.GalleryData = response.data;
+                        $('#GalleryDataTable').DataTable().clear();
+                        $('#GalleryDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('GalleryDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+
+                }
+                console.log(response);
+            });
+
+        })
+
+
     }
 
     function getAward() {
         //$("#global-loader").fadeIn("slow");
-        CommonAppUtilityService.CreateItem("/INT_Setting/getEmployee", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.allEmpData = response.data
-                getAwardType();
-                CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsData", '').then(function (response) {
-                    if (response.status == 200) {
-                        $scope.AwardData = response.data;
-                        $('#AwardDataTable').DataTable().clear();
-                        $('#AwardDataTable').DataTable().destroy();
-                        console.log($scope.AwardData);
-                        setTimeout(function () {
-                            bindDataTable('AwardDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
 
-                    }
-                    console.log(response);
-                });
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getEmployee", '').then(function (response) {
+                if (response.status == 200) {
+                    $scope.allEmpData = response.data
+                    getAwardType();
+                    CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsData", '').then(function (response) {
+                        if (response.status == 200) {
+                            $scope.AwardData = response.data;
+                            resolve(response.data);
+                            $('#AwardDataTable').DataTable().clear();
+                            $('#AwardDataTable').DataTable().destroy();
+                            console.log($scope.AwardData);
+                            setTimeout(function () {
+                                bindDataTable('AwardDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
 
-            }
-        });
+                        }
+                        console.log(response);
+                    });
+
+                }
+            });
+
+        })
+
+
 
     }
 
     function getAwardType() {
 
-        CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsTypeData", '').then(function (response) {
-            if (response.status == 200) {
-                $scope.awardType = response.data;
-                /*console.log($scope.AwardData);
-                setTimeout(function () {
-                    bindDataTable('AwardTypeDataTable');
-                    $("#global-loader").fadeOut("slow");
-                }, 500);*/
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsTypeData", '').then(function (response) {
+                if (response.status == 200) {
+                    $scope.awardType = response.data;
+                    resolve(response.data);
+                    /*console.log($scope.AwardData);
+                    setTimeout(function () {
+                        bindDataTable('AwardTypeDataTable');
+                        $("#global-loader").fadeOut("slow");
+                    }, 500);*/
 
-            }
-            console.log(response);
-        });
+                }
+                console.log(response);
+            });
+
+        })
+
+
     }
+
 
     function getSettingBy(SettingFor) {
         var data;
@@ -176,7 +265,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getSetting", data).then(function (response) {
                 if (response.status == 200) {
-                    //$scope.SettingData = response.data;
+                    $scope.SettingData = response.data;
                     resolve(response.data);
                     console.log(response.data);
                 }
@@ -185,6 +274,180 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
         })
 
     }
+
+    
+    $(document).on('click', '#previewBtn', function () {
+        if ($("#Page_Type").val() != "") {
+            if ($("#Page_Type").val() == "Full Page Content") {
+                $(".rightPageDiv").hide();
+                $(".leftPageDiv").hide();
+                $(".fullPageDiv").show();
+                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                $("#fullPageDivCol").empty().append($('.note-editable').html());
+            } else if ($("#Page_Type").val() == "Right Page Content") {
+                $(".fullPageDiv").hide();
+                $(".leftPageDiv").hide();
+                $(".rightPageDiv").show();
+                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                $("#rightPageDivCol").empty().append($('.note-editable').html());
+                $("#rightpWidget").empty();
+                $("#leftWidget").empty();
+                $scope.testdemoRight($scope.widgetCollection);
+            } else if ($("#Page_Type").val() == "Left Page Content") {
+                $(".fullPageDiv").hide();
+                $(".rightPageDiv").hide();
+                $(".leftPageDiv").show();
+                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                $("#lefttPageDivCol").empty().append($('.note-editable').html());
+                $("#rightpWidget").empty();
+                $("#leftWidget").empty();
+                $scope.testdemoLeft($scope.widgetCollection);
+            }
+            //$scope.testdemoFull($("#Widget_Name").val(), $("#Pinned_Content").val());
+            $("#exampleModalFull").modal('show');
+        }
+        
+    });
+    $(document).on('click', '#lightgallery', function () {
+
+        $(this).lightGallery();
+
+    });
+
+    $(document).on('keyup', '.squencetxtWidget', function () {
+        $scope.widgetCollection[parseInt($(this).attr("data-Id"))].Squence = parseInt($(this).val());
+        console.log($scope.widgetCollection);
+
+    });
+
+    $(document).on('keyup', '#Page_Name', function () {
+        $("#url_Created").empty().append($(this).val());
+    });
+
+    $(document).on('change', '#Page_Type', function () {
+        if ($(this).val() == "" || $(this).val() == "Full Page Content") {
+            $("#Widget_Div").hide();
+            $("#Pinned_Content_Div").hide();
+            $("#widgetAddRow").hide();
+        } else {
+            $("#Widget_Div").show();
+            $("#widgetAddRow").show();
+        }
+    });
+
+    $(document).on('click', '#RemoveWidget', function () {
+        var id = $(this).attr("data-Id");
+       
+        $scope.widgetCollection = $scope.widgetCollection.filter(function (item) {
+                return item.PinnedId != id
+            
+        })
+        console.log($scope.widgetCollection);
+        var tbody = createTableBodyW($scope.widgetCollection);
+
+        $("#widgetTrBody").empty().append(tbody);
+        $("#widgetTable").show();
+    });
+
+    $(document).on('click', '#widgetAddClick', function () {
+        if ($("#Widget_Name").val() == "Quick Link") {
+            var idArray = [];
+            $("#Pinned_Content option:selected").each(function (index) {
+                var $this = $(this);
+                idArray.push({
+                    ID: $this.val(),
+                })
+            });
+
+            $scope.widgetCollection.push({
+                "widgetName": $("#Widget_Name").val(),
+                "PinnedId": "qw" + ($scope.widgetCollection.length + 1),
+                "PiinedData": '',
+                "Squence": ($scope.widgetCollection.length + 1),
+                "idArray": idArray,
+            })
+
+        } else if ($("#Widget_Name").val() == "Event" || $("#Widget_Name").val() == "Awards" || $("#Widget_Name").val() == "Birthday" || $("#Widget_Name").val() == "Anniversary" || $("#Widget_Name").val() == "Holiday List") {
+            $scope.widgetCollection.push({
+                "widgetName": $("#Widget_Name").val(),
+                "PinnedId": "e" + ($scope.widgetCollection.length + 1),
+                "PiinedData": '',
+                "Squence": ($scope.widgetCollection.length + 1),
+                "idArray": [],
+            })
+        }else {
+
+            $("#Pinned_Content option:selected").each(function (index) {
+                var $this = $(this);
+
+                $scope.widgetCollection.push({
+                    "widgetName": $("#Widget_Name").val(),
+                    "PinnedId": $this.val(),
+                    "PiinedData": $this.text(),
+                    "Squence": ($scope.widgetCollection.length + 1),
+                    "idArray": [],
+                })
+            });
+        }
+        
+        var tbody = createTableBodyW($scope.widgetCollection);
+
+        $("#widgetTrBody").empty().append(tbody);
+        $("#widgetTable").show();
+        console.log($scope.widgetCollection);
+        
+    });
+
+    function createTableBodyW(data) {
+        var tbody = "";
+        for (var i = 0; i < data.length; i++) {
+            tbody += '<tr><th scope="row">' + (i + 1) + '</th><td>' + data[i].widgetName + '</td><td><input type="text" data-Id="' + i + '" class="form-control squencetxtWidget" value="' + data[i].Squence+'"/></td><td>' + data[i].PiinedData + '</td><td><i class="si si-trash text-danger mr-2 pointerCursor" data-Id="' + data[i].PinnedId + '" Id="RemoveWidget" title="Delete"></i></td></tr>'
+        }
+        return tbody;
+    }
+
+    $(document).on('change', '#Widget_Name', function () {
+        var d = $(this).val();
+        if (d != undefined && d != null) {
+            if (d == "Article") {
+                $("#Pinned_Content_Div").hide();
+                getArticle(false).then(function (response) {
+                    var dData = createDropdownData(response, "ID", "Article_Title", "", true, false);
+                    $('#Pinned_Content').empty().append(dData);
+                    $("#Pinned_Content_Div").show();
+                    $('.multiSelectDrop').multiselect('rebuild');
+                })
+            } else if (d == "Notice") {
+                $("#Pinned_Content_Div").hide();
+                getNotice(false).then(function (response) {
+                    var dData = createDropdownData(response, "ID", "Notice_Title", "", true, false);
+                    $('#Pinned_Content').empty().append(dData);
+                    $("#Pinned_Content_Div").show();
+                    $('.multiSelectDrop').multiselect('rebuild');
+                })
+            } else if (d == "Gallery") {
+                $("#Pinned_Content_Div").hide();
+                getGallery(false).then(function (response) {
+                    var dData = createDropdownData(response, "ID", "Album_Title", "", true, false);
+                    $('#Pinned_Content').empty().append(dData);
+                    $("#Pinned_Content_Div").show();
+                    $('.multiSelectDrop').multiselect('rebuild');
+                })
+            } else if (d == "Quick Link") {
+                $("#Pinned_Content_Div").hide();
+                getQuickLink(false).then(function (response) {
+                    var dData = createDropdownData(response, "ID", "Quick_Link_Title", "", true, false);
+                    $('#Pinned_Content').empty().append(dData);
+                    $("#Pinned_Content_Div").show();
+                    $('.multiSelectDrop').multiselect('rebuild');
+                })
+            } else {
+                $("#Pinned_Content_Div").hide();
+            }
+        }
+    });
+
+   // getQuickLink(loadFresh)
 
     function getEmpData() {
         console.log("EmpData");
@@ -200,17 +463,17 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
 
         $("#global-loader").fadeIn("slow");
         if ($(this).attr('data-title') == "Article") {
-            getArticle();
+            getArticle(true);
         } else if ($(this).attr('data-title') == "Notice") {
-            getNotice();
+            getNotice(true);
         } else if ($(this).attr('data-title') == "Event") {
-            getEvent();
+            getEvent(true);
         } else if ($(this).attr('data-title') == "Slider") {
-            getSlider();
+            getSlider(true);
         } else if ($(this).attr('data-title') == "Awards") {
-            getAward();
+            getAward(true);
         } else if ($(this).attr('data-title') == "Photo Gallery") {
-            getGallery();
+            getGallery(true);
         } else {
             $("#global-loader").fadeOut("slow");
         }
@@ -219,7 +482,12 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
     $(document).on('click', '.add_Click', function () {
         var tab_Clicked = $(this).attr('data-Tab');
         if (tab_Clicked == "Award") {
-            oprnPopupByClick(tab_Clicked, createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode'), createDropdownData($scope.awardType, 'Award_type', 'Award_type', ''));
+            oprnPopupByClick(tab_Clicked, createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true), createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', false, true));
+        } else if (tab_Clicked == "Pages") {
+            getSettingBy().then(function (response) {
+                var dropData = createDropdownData(response, 'Setting_For', 'Setting_For', '', true, true);
+                oprnPopupByClick(tab_Clicked, dropData);
+            });
         } else {
             oprnPopupByClick(tab_Clicked);
         }
@@ -233,7 +501,6 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             $("#cardStructureFont").attr('style', 'color:' + $(this).val() + '!important');
 
         }
-        //alert($(this).val());
     });
 
     $(document).on('click', '#show_card_Title', function () {
@@ -253,11 +520,20 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
         $(".ribbion_Ti").empty().append($(this).val());
     });
 
-    function createDropdownData(data, dataId, datatext, concateData) {
-        var html = '<option label="Choose one"></option>';
+    function createDropdownData(data, dataId, datatext, concateData, cond, defaultS) {
+        var html = "";
+        if (defaultS) {
+            html = '<option label="Choose one"></option>';
+        }
         for (var i = 0; i < data.length; i++) {
-            var concateD = concateData == "" || null ? data[i][datatext] : data[i][concateData] + ' - ' + data[i][datatext]
-            html += '<option value="' + data[i][dataId] + '">' + concateD + '</option>';
+            var concateD = concateData == "" || null ? data[i][datatext] : data[i][concateData] + ' - ' + data[i][datatext];
+            if (cond) {
+                if (data[i].Active) {
+                    html += '<option value="' + data[i][dataId] + '">' + concateD + '</option>';
+                }
+            } else {
+                html += '<option value="' + data[i][dataId] + '">' + concateD + '</option>';
+            }
         }
         return html;
     }
@@ -541,7 +817,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             CommonAppUtilityService.DataWithFile("/INT_Setting/UpdateGallery", fileDataNew).then(function (data) {
                 if (data[0] == "OK") {
                     $('#SuccessModelProject').modal('show');
-                    getGallery();
+                    getGallery(true);
                 }
             });
 
@@ -560,7 +836,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             CommonAppUtilityService.DataWithFile("/INT_Setting/SaveGallery", fileDataNew).then(function (data) {
                 if (data[0] == "OK") {
                     $('#SuccessModelProject').modal('show');
-                    getGallery();
+                    getGallery(true);
                 }
             });
         }
@@ -597,9 +873,6 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
                     timer: 2000,
                 })
                 $('#exampleModalRight').modal('show');
-
-
-
             }
 
         });
@@ -672,7 +945,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             CommonAppUtilityService.CreateItem("/INT_Setting/UpdateSliderData", data).then(function (response) {
                 if (response.data[0] == "OK") {
                     $('#SuccessModelProject').modal('show');
-                    getSlider();
+                    getSlider(true);
                 }
 
             });
@@ -680,13 +953,12 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             CommonAppUtilityService.CreateItem("/INT_Setting/SaveSliderData", data).then(function (response) {
                 if (response.data[0] == "OK") {
                     $('#SuccessModelProject').modal('show');
-                    getSlider();
+                    getSlider(true);
                 }
 
             });
         }
     }
-
 
     function saveNotice(processType) {
         var articleValidateArray = [
@@ -731,6 +1003,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
         }
     }
 
+
     function callNoticeSave(docUrl, docType, type) {
         var attachDocData = $('#attachDoc').hasClass('on');
         var activeData = $('#active_Check').hasClass('on');
@@ -751,7 +1024,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
                 if (response.data[0] == "OK") {
                     //$("#global-loader").fadeOut("slow");
                     $('#SuccessModelProject').modal('show');
-                    getNotice();
+                    getNotice(true);
                 }
                 // $('#SuccessModelProject').modal('show');
 
@@ -761,7 +1034,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
                 if (response.data[0] == "OK") {
                     //$("#global-loader").fadeOut("slow");
                     $('#SuccessModelProject').modal('show');
-                    getNotice();
+                    getNotice(true);
                 }
                 // $('#SuccessModelProject').modal('show');
 
@@ -848,7 +1121,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             if (response.data[0] == "OK") {
                 //$("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
-                getEvent();
+                getEvent(true);
             }
             // $('#SuccessModelProject').modal('show');
 
@@ -873,7 +1146,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             if (response.data[0] == "OK") {
                 //$("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
-                getEvent();
+                getEvent(true);
             }
             // $('#SuccessModelProject').modal('show');
 
@@ -893,7 +1166,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             if (response.data[0] == "OK") {
                 //$("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
-                getArticle();
+                getArticle(true);
             }
             // $('#SuccessModelProject').modal('show');
 
@@ -915,7 +1188,7 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
             if (response.data[0] == "OK") {
                 //$("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
-                getArticle();
+                getArticle(true);
             }
             // $('#SuccessModelProject').modal('show');
 
@@ -1019,8 +1292,8 @@ settingApp.controller('settingController', function ($scope, $http, CommonAppUti
                 console.log(response);
             });
         } else if (openFor == "Award") {
-            a.awardHtml = createDropdownData($scope.awardType, 'Award_type', 'Award_type', '');
-            a.empData = createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode');
+            a.awardHtml = createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', false, true);
+            a.empData = createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true);
             inilizeEditpopUp(a, openFor);
         } else if (openFor == "Card_SettingPop") {
             getSettingBy().then(function (response) {

@@ -26,10 +26,15 @@ namespace IntranetWeb.BAL.Intranet
             jArray = restService.GetAllItemFromList(clientContext, "INT_EventTx", rESTOption);
             return jArray;
         }
-        public List<INT_EventTxModel> GetEventData(ClientContext clientContext)
+        public List<INT_EventTxModel> GetEventData(ClientContext clientContext, bool filterOn)
         {
             List<INT_EventTxModel> EventData = new List<INT_EventTxModel>();
             string filter = "";
+            if (filterOn)
+            {
+                string dateEnd = DateTime.Now.ToString("M/d/yyyy");
+                filter = "(End_Date eq '" + dateEnd + "' or End_Date ge '" + dateEnd + "') and (Active eq '1')";
+            }
             JArray jArray = RESTGet(clientContext, filter);
             foreach (JObject j in jArray)
             {

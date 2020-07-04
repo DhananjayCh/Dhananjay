@@ -27,6 +27,8 @@ namespace IntranetWeb.Controllers.Intranet
         INT_CommanFu BalCommon = new INT_CommanFu();
         Emp_BasicInfoBal BalEmp_BasicInfo = new Emp_BasicInfoBal();
         INT_SettingBal BalSetting = new INT_SettingBal();
+        INT_QuickLinkBal BalQuickLink = new INT_QuickLinkBal();
+        INT_HolidayListBal BalHolidayList = new INT_HolidayListBal();
 
 
         public ActionResult Index()
@@ -43,38 +45,59 @@ namespace IntranetWeb.Controllers.Intranet
             return View();
         }
 
-        public JsonResult getArticleData()
+        public JsonResult getArticleData(string Id)
         {
             List<INT_ArticleTxModel> articleData = new List<INT_ArticleTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-
-                articleData = BalArticle.GetArticleData(clientContext);
+                if(Id == null || Id == "")
+                {
+                    articleData = BalArticle.GetArticleData(clientContext,null);
+                }
+                else
+                {
+                    articleData = BalArticle.GetArticleData(clientContext,Id);
+                }
+                
                 return Json(articleData, JsonRequestBehavior.AllowGet);
             }
 
         }
-        public JsonResult getNoticeData()
+
+
+        public JsonResult getNoticeData(string Id)
         {
             List<INT_NoticeTxModel> noticeData = new List<INT_NoticeTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-
-                noticeData = BalNotice.GetNoticeData(clientContext);
+                if (Id == null || Id == "")
+                {
+                    noticeData = BalNotice.GetNoticeData(clientContext,null);
+                }
+                else
+                {
+                    noticeData = BalNotice.GetNoticeData(clientContext, Id);
+                }
                 return Json(noticeData, JsonRequestBehavior.AllowGet);
             }
 
         }
-        public JsonResult getEventData()
+        public JsonResult getEventData(string callType)
         {
             List<INT_EventTxModel> eventData = new List<INT_EventTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-
-                eventData = BalEvent.GetEventData(clientContext);
+                if (callType == null || callType == "")
+                { 
+                    eventData = BalEvent.GetEventData(clientContext, false);
+                }
+                else
+                {
+                    eventData = BalEvent.GetEventData(clientContext, true);
+                }
                 return Json(eventData, JsonRequestBehavior.AllowGet);
             }
 
@@ -91,14 +114,22 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
         }
-        public JsonResult getAwardsData()
+        public JsonResult getAwardsData(string callType)
         {
             List<INT_AwardTxModel> awardData = new List<INT_AwardTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
 
-                awardData = BalAward.GetAwardData(clientContext);
+                
+                if (callType == null || callType == "")
+                {
+                    awardData = BalAward.GetAwardData(clientContext,false);
+                }
+                else
+                {
+                    awardData = BalAward.GetAwardData(clientContext,true);
+                }
                 return Json(awardData, JsonRequestBehavior.AllowGet);
             }
 
@@ -152,6 +183,59 @@ namespace IntranetWeb.Controllers.Intranet
 
                 settingData = BalSetting.GetSettingData(clientContext, setting);
                 return Json(settingData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult getQuicklink(List<INT_QuickLinkModel> recivceData)
+        {
+            List<INT_QuickLinkModel> QuickLinkData = new List<INT_QuickLinkModel>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                int counter = 0;
+                string filterD = "";
+                if(recivceData != null)
+                { 
+                    foreach (var item in recivceData)
+                    {
+                        counter++;
+                        if (recivceData.Count == counter)
+                        {
+                            filterD += "(ID eq '" + item.ID + "')";
+                        }
+                        else
+                        {
+                            filterD += "(ID eq '" + item.ID + "') or ";
+                        }
+                    }
+                }else
+                {
+                    filterD = null;
+                }
+                QuickLinkData = BalQuickLink.GetQuickLinkData(clientContext, filterD);
+                return Json(QuickLinkData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult getHolidayListData(string callType)
+        {
+            List<INT_HolidayListModel> holidayListData = new List<INT_HolidayListModel>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+
+
+                if (callType == null || callType == "")
+                {
+                    holidayListData = BalHolidayList.GetHolidayListData(clientContext, false);
+                }
+                else
+                {
+                    holidayListData = BalHolidayList.GetHolidayListData(clientContext, true);
+                }
+                return Json(holidayListData, JsonRequestBehavior.AllowGet);
             }
 
         }
