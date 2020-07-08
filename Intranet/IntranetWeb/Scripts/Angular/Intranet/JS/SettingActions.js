@@ -15,6 +15,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $scope.SelectPinnedData = [];
     $scope.widgetCollection = [];
     $scope.PagesData = [];
+    $scope.awardTypeData = [];
 
     var noticeDoc = {};
 
@@ -203,7 +204,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             CommonAppUtilityService.CreateItem("/INT_Setting/getEmployee", '').then(function (response) {
                 if (response.status == 200) {
                     $scope.allEmpData = response.data
-                    getAwardType();
+                    getAwardType(false);
                     CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsData", '').then(function (response) {
                         if (response.status == 200) {
                             $scope.AwardData = response.data;
@@ -229,18 +230,24 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     }
 
-    function getAwardType() {
+    function getAwardType(loadFresh) {
 
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsTypeData", '').then(function (response) {
                 if (response.status == 200) {
                     $scope.awardType = response.data;
                     resolve(response.data);
-                    /*console.log($scope.AwardData);
-                    setTimeout(function () {
-                        bindDataTable('AwardTypeDataTable');
-                        $("#global-loader").fadeOut("slow");
-                    }, 500);*/
+                    if (loadFresh) {
+                        $scope.awardTypeData = response.data;
+                        $('#awardTypeDataTable').DataTable().clear();
+                        $('#awardTypeDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('awardTypeDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                   
 
                 }
                 console.log(response);
@@ -249,10 +256,14 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         })
     }
 
-    function getPagesData(loadFresh) {
+    function getPagesData(loadFresh,d) {
         console.log(new Date());
         return new Promise(function (resolve, reject) {
-            CommonAppUtilityService.CreateItem("/INT_Setting/getPagesData", '').then(function (response) {
+            var passD = "";
+            if (!loadFresh) {
+                passD = d;
+            }
+            CommonAppUtilityService.CreateItem("/INT_Setting/getPagesData", passD).then(function (response) {
                 console.log(new Date());
                 if (response.status == 200) {
                     resolve(response.data);
@@ -524,6 +535,8 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             getPagesData(true);
         } else if ($(this).attr('data-title') == "Menu") {
             getNavigationMenuData(true);
+        } else if ($(this).attr('data-title') == "Awards_Types") {
+            getAwardType(true);
         } else {
             $("#global-loader").fadeOut("slow"); 
         }
@@ -541,7 +554,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             });
         } else if (tab_Clicked == "Menu") {
             $scope.widgetCollection = [];
-            getPagesData(false).then(function (response) {
+            getPagesData(false,'').then(function (response) {
                 var dropData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
                 var dropData1 = createDropdownData($scope.MenuData, 'ID', 'MenuName', '', true, true);
                 oprnPopupByClick(tab_Clicked, dropData, dropData1);
@@ -633,6 +646,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             } else if ($(this).attr('data-operation') == "edit") {
                 saveAwards('edit');
             }
+        } else if ($(this).attr('data-saveType') == "Awards_Types") {
+            if ($(this).attr('data-operation') == "Save") {
+                saveAwards_Types('save');
+            } else if ($(this).attr('data-operation') == "edit") {
+                saveAwards_Types('edit');
+            }
         } else if ($(this).attr('data-saveType') == "Birthday_SettingPop") {
             saveBirthdaySetting('edit');
         }
@@ -700,7 +719,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         var activeData = $('#active_Check').hasClass('on');
         var finalUrl = "#";
         if (IsInternalUrl) {
-            finalUrl = "/SitePages/ViewAllNotice.aspx?" + $("#Internal_Pages").val();
+            finalUrl = "/SitePages/Pages.aspx?" + $("#Internal_Pages").val();
         } else {
             finalUrl = $("#Menu_URL").val()
         }
@@ -723,7 +742,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             data.ID = parseInt($('#saveActionData').attr('data-updateId'));
             console.log("PageData");
             console.log(data);
-            CommonAppUtilityService.CreateItem("/INT_Setting/SaveNavigationMenuData", data).then(function (response) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/UpdateNavigationMenuData", data).then(function (response) {
                 if (response.data[0] == "OK") {
                     $('#SuccessModelProject').modal('show');
                     getNavigationMenuData(true);
@@ -745,6 +764,54 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
 /**********************Menu Operation end***************************/
 
+/**********************Awards Types Operation start***************************/
+    function saveAwards_Types(processType) {
+
+        var articleValidateArray = [
+            { 'id': 'Award_Type', 'message': 'Please Enter Award Types', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+
+
+        ]
+        if (validateSave(articleValidateArray)) {
+            $("#exampleModalRight").modal('hide');
+            $("#global-loader").fadeIn("slow");
+            callAwards_Types(processType);
+
+        }
+
+    }
+
+    function callAwards_Types(type) {
+        var activeData = $('#active_Check').hasClass('on');
+
+        var data = {
+            'Award_type': $("#Award_Type").val(),
+            'Active': activeData,
+        }
+
+        if (type == "edit") {
+            data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/UpdateAwardTypes", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getAwardType(true);
+                }
+
+            });
+        } else {
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/SaveAwardTypes", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getAwardType(true);
+                }
+
+            });
+        }
+    }
+/**********************Awards Types Operation end***************************/
+
     function savePages(processType) {
 
         var articleValidateArray = [
@@ -754,9 +821,47 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
         ]
         if (validateSave(articleValidateArray)) {
-            $("#exampleModalRight").modal('hide');
-            $("#global-loader").fadeIn("slow");
-            callPages(processType);
+            $("#rightPopupLoaderLabel").empty().append("Please Wait, While we valiadte Page Name");
+            $("#global-loaderPopup").fadeIn("slow");
+            var d = {
+                pageName: $("#Page_Name").val()
+            }
+            if (processType == "edit") {
+                if (($("#Page_Name").attr('data-previous') != undefined && $("#Page_Name").attr('data-previous') != null) && (($("#Page_Name").attr('data-previous')).toLowerCase() != ($("#Page_Name").val()).toLowerCase())) {
+                    getPagesData(false, d).then(function (response) {
+                        console.log(response);
+                        if (response.length > 0) {
+                            $("#global-loaderPopup").fadeOut("slow");
+                            $("#Page_Name").parent().append("<label class='error'>Page Name already exists, Please make sure Page Name unique</label>")
+                        } else {
+                            $("#global-loaderPopup").fadeOut("slow");
+                            $("#exampleModalRight").modal('hide');
+                            $("#global-loader").fadeIn("slow");
+                            callPages(processType);
+                        }
+                    });
+                } else {
+                    $("#global-loaderPopup").fadeOut("slow");
+                    $("#exampleModalRight").modal('hide');
+                    $("#global-loader").fadeIn("slow");
+                    callPages(processType);
+                }
+            } else {
+                getPagesData(false, d).then(function (response) {
+                    console.log(response);
+                    if (response.length > 0) {
+                        $("#global-loaderPopup").fadeOut("slow");
+                        $("#Page_Name").parent().append("<label class='error'>Page Name already exists, Please make sure Page Name unique</label>")
+                    } else {
+                        $("#global-loaderPopup").fadeOut("slow");
+                        $("#exampleModalRight").modal('hide');
+                        $("#global-loader").fadeIn("slow");
+                        callPages(processType);
+                    }
+                });
+            }
+            
+
 
         }
 
@@ -1547,6 +1652,15 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     $scope.widgetCollection = $scope.widgetCollection.concat(widgetData);
                     a.widgetBody = createTableBodyW(widgetData);
                 }
+                inilizeEditpopUp(a, openFor);
+            });
+        } else if (openFor == "Menu") {
+            $("#global-loader").fadeIn("slow");
+            $scope.widgetCollection = [];
+            getPagesData(false, '').then(function (response) {
+                $("#global-loader").fadeOut("slow");
+                a.pagesData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
+                a.parentMenuData = createDropdownData($scope.MenuData, 'ID', 'MenuName', '', true, true);
                 inilizeEditpopUp(a, openFor);
             });
         } else {

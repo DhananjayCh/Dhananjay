@@ -67,6 +67,48 @@ namespace IntranetWeb.Controllers.Intranet
 
         }
 
+        public JsonResult SaveArticleData(INT_ArticleTxModel article)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Article_Title': '" + article.Article_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + article.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Article': '" + article.Pinned_Article + "'";
+                itemdata += " ,'Active': '" + article.Active + "'";
+
+
+                returnID = BalArticle.SaveArticle(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult UpdateArticleData(INT_ArticleTxModel article)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Article_Title': '" + article.Article_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + article.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Article': '" + article.Pinned_Article + "'";
+                itemdata += " ,'Active': '" + article.Active + "'";
+
+
+                returnID = BalArticle.UpdateArticle(clientContext, itemdata, Convert.ToString(article.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult getNoticeData(string Id)
         {
@@ -86,6 +128,63 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
         }
+
+        public JsonResult SaveNoticeData(INT_NoticeTxModel noticeData)
+        {
+
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
+                if (noticeData.DocUrl != null && noticeData.DocUrl != "")
+                {
+                    itemdata += " ,'DocUrl': '" + noticeData.DocUrl.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Pinned_Notice': '" + noticeData.Pinned_Notice + "'";
+                itemdata += " ,'Active': '" + noticeData.Active + "'";
+
+
+                returnID = BalNotice.SaveNotice(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateNoticeData(INT_NoticeTxModel noticeData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
+                if (noticeData.DocUrl != null && noticeData.DocUrl != "")
+                {
+                    itemdata += " ,'DocUrl': '" + noticeData.DocUrl.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Pinned_Notice': '" + noticeData.Pinned_Notice + "'";
+                itemdata += " ,'Active': '" + noticeData.Active + "'";
+
+
+                returnID = BalNotice.UpdateNotice(clientContext, itemdata, Convert.ToString(noticeData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+
         public JsonResult getEventData(string callType)
         {
             List<INT_EventTxModel> eventData = new List<INT_EventTxModel>();
@@ -104,6 +203,63 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
         }
+
+        public JsonResult SaveEventData(INT_EventTxModel eventData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Event_Name': '" + eventData.Event_Name.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
+                if (eventData.End_Date != null && eventData.End_Date != "")
+                {
+                    itemdata += " ,'End_Date': '" + eventData.End_Date + "'";
+                }
+                itemdata += " ,'All_Day_Event': '" + eventData.All_Day_Event + "'";
+                itemdata += " ,'Pinned_Event': '" + eventData.Pinned_Event + "'";
+                itemdata += " ,'Active': '" + eventData.Active + "'";
+
+
+                returnID = BalEvent.SaveEvent(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateEventData(INT_EventTxModel eventData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Event_Name': '" + eventData.Event_Name.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
+                if (eventData.End_Date != null && eventData.End_Date != "")
+                {
+                    itemdata += " ,'End_Date': '" + eventData.End_Date + "'";
+                }
+                itemdata += " ,'All_Day_Event': '" + eventData.All_Day_Event + "'";
+                itemdata += " ,'Pinned_Event': '" + eventData.Pinned_Event + "'";
+                itemdata += " ,'Active': '" + eventData.Active + "'";
+
+
+                returnID = BalEvent.UpdateEvent(clientContext, itemdata, Convert.ToString(eventData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getSiderData()
         {
             List<INT_SliderTxModel> sliderData = new List<INT_SliderTxModel>();
@@ -116,6 +272,60 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
         }
+
+        public JsonResult SaveSliderData(INT_SliderTxModel sliderData)
+        {
+
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject.Replace("'", @"\'") + "'";
+                if (sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
+                {
+                    itemdata += " ,'Slider_Image_Url': '" + sliderData.Slider_Image_Url.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Active': '" + sliderData.Active + "'";
+
+
+                returnID = BalSlider.SaveSlider(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateSliderData(INT_SliderTxModel sliderData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject.Replace("'", @"\'") + "'";
+                if (sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
+                {
+                    itemdata += " ,'Slider_Image_Url': '" + sliderData.Slider_Image_Url.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Active': '" + sliderData.Active + "'";
+
+
+                returnID = BalSlider.UpdateSlider(clientContext, itemdata, Convert.ToString(sliderData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getAwardsData(string callType)
         {
             List<INT_AwardTxModel> awardData = new List<INT_AwardTxModel>();
@@ -137,6 +347,52 @@ namespace IntranetWeb.Controllers.Intranet
 
         }
 
+        public JsonResult SaveAwards(INT_AwardTxModel Award)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Award_type': '" + Award.Award_type.Replace("'", @"\'") + "'";
+                itemdata += " ,'Emp_Code': '" + Award.Emp_Code.Replace("'", @"\'") + "'";
+                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
+                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
+                itemdata += " ,'Active': '" + Award.Active + "'";
+
+                returnID = BalAward.SaveAwards(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateAwards(INT_AwardTxModel Award)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Award_type': '" + Award.Award_type.Replace("'", @"\'") + "'";
+                itemdata += " ,'Emp_Code': '" + Award.Emp_Code.Replace("'", @"\'") + "'";
+                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
+                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
+                itemdata += " ,'Active': '" + Award.Active + "'";
+
+                returnID = BalAward.UpdateAwards(clientContext, itemdata, Convert.ToString(Award.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getAwardsTypeData()
         {
             List<INT_AwardTypeMasterModel> awardTypeData = new List<INT_AwardTypeMasterModel>();
@@ -150,30 +406,42 @@ namespace IntranetWeb.Controllers.Intranet
 
         }
 
-        public JsonResult getGalleryData()
+        public JsonResult SaveAwardTypes(INT_AwardTypeMasterModel AwardType)
         {
-            List<INT_PhotoGalleryTxModel> galleryData = new List<INT_PhotoGalleryTxModel>();
+            List<object> obj = new List<object>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
+                string returnID = "0";
 
-                galleryData = BalPhotoGallery.GetPhotoGalleryData(clientContext);
-                return Json(galleryData, JsonRequestBehavior.AllowGet);
+                string itemdata = " 'Award_type': '" + AwardType.Award_type.Replace("'", @"\'") + "'";
+                itemdata += " ,'Active': '" + AwardType.Active + "'";
+
+                returnID = BalAwardType.SaveAwardType(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
             }
 
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getGalleryDataByID(string Id)
+        public JsonResult UpdateAwardTypes(INT_AwardTypeMasterModel AwardType)
         {
-            List<INT_PhotoGalleryChildTxModel> galleryData = new List<INT_PhotoGalleryChildTxModel>();
+            List<object> obj = new List<object>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
+                string returnID = "0";
 
-                galleryData = BalPhotoGalleryChild.GetPhotoGalleryChildDataByParentId(clientContext, Id);
-                return Json(galleryData, JsonRequestBehavior.AllowGet);
+                string itemdata = " 'Award_type': '" + AwardType.Award_type.Replace("'", @"\'") + "'";
+                itemdata += " ,'Active': '" + AwardType.Active + "'";
+
+                returnID = BalAwardType.UpdateAwardType(clientContext, itemdata, Convert.ToString(AwardType.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
             }
 
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult getSetting(string setting)
@@ -188,6 +456,106 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
         }
+
+        public JsonResult updateBirthdaySet(INT_SettingModel birthData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Before_Event': '" + birthData.Before_Event + "'";
+                itemdata += " ,'After_Event': '" + birthData.After_Event + "'";
+                itemdata += " ,'Show_Card_Title': '" + birthData.Show_Card_Title + "'";
+                if (birthData.Show_Card_Title)
+                {
+                    itemdata += " ,'Card_Title': '" + birthData.Card_Title.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Background_Color': '" + birthData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + birthData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateAnniversarySet(INT_SettingModel anniversaryData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Before_Event': '" + anniversaryData.Before_Event + "'";
+                itemdata += " ,'After_Event': '" + anniversaryData.After_Event + "'";
+                itemdata += " ,'Show_Card_Title': '" + anniversaryData.Show_Card_Title + "'";
+                if (anniversaryData.Show_Card_Title)
+                {
+                    itemdata += " ,'Card_Title': '" + anniversaryData.Card_Title.Replace("'", @"\'") + "'";
+                }
+                itemdata += " ,'Background_Color': '" + anniversaryData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + anniversaryData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(anniversaryData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateCardSet(List<INT_SettingModel> cardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                foreach (INT_SettingModel item in cardData)
+                {
+                    string itemdata = " 'Squence': '" + item.Squence + "'";
+                    itemdata += " ,'Active': '" + item.Active + "'";
+                    returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(item.ID));
+                }
+
+                //returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateAwardSet(INT_SettingModel awardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Background_Color': '" + awardData.Background_Color + "'";
+                itemdata += " ,'Font_Color': '" + awardData.Font_Color + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(awardData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+       
+
+
+
+        
 
         public JsonResult getQuicklink(List<INT_QuickLinkModel> recivceData)
         {
@@ -276,8 +644,8 @@ namespace IntranetWeb.Controllers.Intranet
             {
                 string returnID = "0";
 
-                string itemdata = " 'MenuName': '" + menu.MenuName + "'";
-                itemdata += " ,'URL': '" + menu.URL + "'";
+                string itemdata = " 'MenuName': '" + menu.MenuName.Replace("'", @"\'") + "'";
+                itemdata += " ,'URL': '" + menu.URL.Replace("'", @"\'") + "'";
                 itemdata += " ,'OrderNo': '" + menu.OrderNo + "'";
                 itemdata += " ,'External_Url': '" + menu.External_Url + "'";
                 itemdata += " ,'Next_Tab': '" + menu.Next_Tab + "'";
@@ -299,14 +667,52 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getPagesData()
+        public JsonResult UpdateNavigationMenuData(INT_NavigationMenuModel menu)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'MenuName': '" + menu.MenuName.Replace("'", @"\'") + "'";
+                itemdata += " ,'URL': '" + menu.URL.Replace("'", @"\'") + "'";
+                itemdata += " ,'OrderNo': '" + menu.OrderNo + "'";
+                itemdata += " ,'External_Url': '" + menu.External_Url + "'";
+                itemdata += " ,'Next_Tab': '" + menu.Next_Tab + "'";
+                if (menu.ParentMenuIdId != 0)
+                {
+                    itemdata += " ,'ParentMenuIdId': '" + menu.ParentMenuIdId + "'";
+                }
+                else
+                {
+                    itemdata += " ,'ParentMenuIdId': null";
+                }
+                itemdata += " ,'Active': '" + menu.Active + "'";
+
+                returnID = BalNavigationMenu.UpdateNavigationMenu(clientContext, itemdata, Convert.ToString(menu.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult getPagesData(string pageName)
         {
             List<INT_PagesTxModel> pagesData = new List<INT_PagesTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-
-                pagesData = BalPages.GetPagesData(clientContext);
+                if(pageName == null || pageName == "")
+                {
+                    pagesData = BalPages.GetPagesData(clientContext,null);
+                }
+                else
+                {
+                    pagesData = BalPages.GetPagesData(clientContext, pageName);
+                }
+                
                 return Json(pagesData, JsonRequestBehavior.AllowGet);
             }
 
@@ -320,9 +726,9 @@ namespace IntranetWeb.Controllers.Intranet
             {
                 string returnID = "0";
 
-                string itemdata = " 'Page_Name': '" + page.Page_Name + "'";
-                itemdata += " ,'Page_Title': '" + page.Page_Title + "'";
-                itemdata += " ,'Page_Type': '" + page.Page_Type + "'";
+                string itemdata = " 'Page_Name': '" + page.Page_Name.Replace("'", @"\'") + "'";
+                itemdata += " ,'Page_Title': '" + page.Page_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Page_Type': '" + page.Page_Type.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Content': '" + page.Page_Content.Replace("'", "&apos;") + "'";
                 itemdata += " ,'Widget_Configuration': '" + page.Widget_Configuration + "'";
                 itemdata += " ,'Active': '" + page.Active + "'";
@@ -343,9 +749,9 @@ namespace IntranetWeb.Controllers.Intranet
             {
                 string returnID = "0";
 
-                string itemdata = " 'Page_Name': '" + page.Page_Name + "'";
-                itemdata += " ,'Page_Title': '" + page.Page_Title + "'";
-                itemdata += " ,'Page_Type': '" + page.Page_Type + "'";
+                string itemdata = " 'Page_Name': '" + page.Page_Name.Replace("'", @"\'") + "'";
+                itemdata += " ,'Page_Title': '" + page.Page_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Page_Type': '" + page.Page_Type.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Content': '" + page.Page_Content.Replace("'", "&apos;") + "'";
                 itemdata += " ,'Widget_Configuration': '" + page.Widget_Configuration + "'";
                 itemdata += " ,'Active': '" + page.Active + "'";
@@ -358,152 +764,6 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveAwards(INT_AwardTxModel Award)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Award_type': '" + Award.Award_type + "'";
-                itemdata += " ,'Emp_Code': '" + Award.Emp_Code + "'";
-                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
-                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
-                itemdata += " ,'Active': '" + Award.Active + "'";
-
-                returnID = BalAward.SaveAwards(clientContext, itemdata);
-                if (Convert.ToInt32(returnID) > 0)
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult UpdateAwards(INT_AwardTxModel Award)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Award_type': '" + Award.Award_type + "'";
-                itemdata += " ,'Emp_Code': '" + Award.Emp_Code + "'";
-                itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
-                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
-                itemdata += " ,'Active': '" + Award.Active + "'";
-
-                returnID = BalAward.UpdateAwards(clientContext, itemdata, Convert.ToString(Award.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult SaveArticleData(INT_ArticleTxModel article)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Article_Title': '" + article.Article_Title + "'";
-                itemdata += " ,'Description': '" + article.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Pinned_Article': '" + article.Pinned_Article + "'";
-                itemdata += " ,'Active': '" + article.Active + "'";
-
-
-                returnID = BalArticle.SaveArticle(clientContext, itemdata);
-                if (Convert.ToInt32(returnID) > 0)
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult UpdateArticleData(INT_ArticleTxModel article)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Article_Title': '" + article.Article_Title + "'";
-                itemdata += " ,'Description': '" + article.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Pinned_Article': '" + article.Pinned_Article + "'";
-                itemdata += " ,'Active': '" + article.Active + "'";
-
-
-                returnID = BalArticle.UpdateArticle(clientContext, itemdata, Convert.ToString(article.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        
-
-        public JsonResult SaveEventData(INT_EventTxModel eventData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Event_Name': '" + eventData.Event_Name + "'";
-                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
-                if (eventData.End_Date != null && eventData.End_Date != "")
-                {
-                    itemdata += " ,'End_Date': '" + eventData.End_Date + "'";
-                }
-                itemdata += " ,'All_Day_Event': '" + eventData.All_Day_Event + "'";
-                itemdata += " ,'Pinned_Event': '" + eventData.Pinned_Event + "'";
-                itemdata += " ,'Active': '" + eventData.Active + "'";
-
-
-                returnID = BalEvent.SaveEvent(clientContext, itemdata);
-                if (Convert.ToInt32(returnID) > 0)
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult UpdateEventData(INT_EventTxModel eventData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Event_Name': '" + eventData.Event_Name + "'";
-                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
-                if (eventData.End_Date != null && eventData.End_Date != "")
-                {
-                    itemdata += " ,'End_Date': '" + eventData.End_Date + "'";
-                }
-                itemdata += " ,'All_Day_Event': '" + eventData.All_Day_Event + "'";
-                itemdata += " ,'Pinned_Event': '" + eventData.Pinned_Event + "'";
-                itemdata += " ,'Active': '" + eventData.Active + "'";
-
-
-                returnID = BalEvent.UpdateEvent(clientContext, itemdata, Convert.ToString(eventData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
 
         public JsonResult SaveImages(System.Web.Mvc.FormCollection formCollection)
         {
@@ -569,112 +829,32 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(returnID, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveNoticeData(INT_NoticeTxModel noticeData)
-        {
 
-            List<object> obj = new List<object>();
+
+        public JsonResult getGalleryData()
+        {
+            List<INT_PhotoGalleryTxModel> galleryData = new List<INT_PhotoGalleryTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-                string returnID = "0";
 
-                string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title + "'";
-                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
-                if (noticeData.DocUrl != null && noticeData.DocUrl != "")
-                {
-                    itemdata += " ,'DocUrl': '" + noticeData.DocUrl + "'";
-                }
-                itemdata += " ,'Pinned_Notice': '" + noticeData.Pinned_Notice + "'";
-                itemdata += " ,'Active': '" + noticeData.Active + "'";
-
-
-                returnID = BalNotice.SaveNotice(clientContext, itemdata);
-                if (Convert.ToInt32(returnID) > 0)
-                    obj.Add("OK");
+                galleryData = BalPhotoGallery.GetPhotoGalleryData(clientContext);
+                return Json(galleryData, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateNoticeData(INT_NoticeTxModel noticeData)
+        public JsonResult getGalleryDataByID(string Id)
         {
-            List<object> obj = new List<object>();
+            List<INT_PhotoGalleryChildTxModel> galleryData = new List<INT_PhotoGalleryChildTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
-                string returnID = "0";
 
-                string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title + "'";
-                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
-                if (noticeData.DocUrl != null && noticeData.DocUrl != "")
-                {
-                    itemdata += " ,'DocUrl': '" + noticeData.DocUrl + "'";
-                }
-                itemdata += " ,'Pinned_Notice': '" + noticeData.Pinned_Notice + "'";
-                itemdata += " ,'Active': '" + noticeData.Active + "'";
-
-
-                returnID = BalNotice.UpdateNotice(clientContext, itemdata, Convert.ToString(noticeData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
+                galleryData = BalPhotoGalleryChild.GetPhotoGalleryChildDataByParentId(clientContext, Id);
+                return Json(galleryData, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult SaveSliderData(INT_SliderTxModel sliderData)
-        {
-
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title + "'";
-                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject + "'";
-                if(sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
-                { 
-                itemdata += " ,'Slider_Image_Url': '" + sliderData.Slider_Image_Url + "'";
-                }
-                itemdata += " ,'Active': '" + sliderData.Active + "'";
-
-
-                returnID = BalSlider.SaveSlider(clientContext, itemdata);
-                if (Convert.ToInt32(returnID) > 0)
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult UpdateSliderData(INT_SliderTxModel sliderData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title + "'";
-                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
-                itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject + "'";
-                if (sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
-                {
-                    itemdata += " ,'Slider_Image_Url': '" + sliderData.Slider_Image_Url + "'";
-                }
-                itemdata += " ,'Active': '" + sliderData.Active + "'";
-
-
-                returnID = BalSlider.UpdateSlider(clientContext, itemdata, Convert.ToString(sliderData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SaveGallery(System.Web.Mvc.FormCollection formCollection)
@@ -691,7 +871,7 @@ namespace IntranetWeb.Controllers.Intranet
             {
                 string returnID = "0";
 
-                string itemdata = " 'Album_Title': '" + _PhotoGallery[0].Album_Title + "'";
+                string itemdata = " 'Album_Title': '" + _PhotoGallery[0].Album_Title.Replace("'", @"\'") + "'";
                 itemdata += " ,'Pinned_Album': '" + _PhotoGallery[0].Pinned_Album + "'";
                 itemdata += " ,'Active': '" + _PhotoGallery[0].Active + "'";
 
@@ -710,7 +890,7 @@ namespace IntranetWeb.Controllers.Intranet
                         {
                             string itemdataChild = " 'Parent_Id': '" + returnID + "'";
                             itemdataChild += " ,'Photo_Title': '" + Request.Files.AllKeys[i].Split('.')[0] + "'";
-                            itemdataChild += " ,'Image_Url': '" + fileUrl + "'";
+                            itemdataChild += " ,'Image_Url': '" + fileUrl.Replace("'", @"\'") + "'";
                             itemdataChild += " ,'Active': '" + _PhotoGallery[0].Active + "'";
 
                             BalPhotoGalleryChild.SavePhotoGalleryChild(clientContext, itemdataChild);
@@ -741,7 +921,7 @@ namespace IntranetWeb.Controllers.Intranet
             {
                 string returnID = "0";
 
-                string itemdata = " 'Album_Title': '" + _PhotoGallery[0].Album_Title + "'";
+                string itemdata = " 'Album_Title': '" + _PhotoGallery[0].Album_Title.Replace("'", @"\'") + "'";
                 itemdata += " ,'Pinned_Album': '" + _PhotoGallery[0].Pinned_Album + "'";
                 itemdata += " ,'Active': '" + _PhotoGallery[0].Active + "'";
 
@@ -761,7 +941,7 @@ namespace IntranetWeb.Controllers.Intranet
                         {
                             string itemdataChild = " 'Parent_Id': '" + returnID + "'";
                             itemdataChild += " ,'Photo_Title': '" + Request.Files.AllKeys[i].Split('.')[0] + "'";
-                            itemdataChild += " ,'Image_Url': '" + fileUrl + "'";
+                            itemdataChild += " ,'Image_Url': '" + fileUrl.Replace("'", @"\'") + "'";
                             itemdataChild += " ,'Active': '" + _PhotoGallery[0].Active + "'";
 
                             BalPhotoGalleryChild.SavePhotoGalleryChild(clientContext, itemdataChild);
@@ -795,99 +975,7 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult updateBirthdaySet(INT_SettingModel birthData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Before_Event': '" + birthData.Before_Event + "'";
-                itemdata += " ,'After_Event': '" + birthData.After_Event + "'";
-                itemdata += " ,'Show_Card_Title': '" + birthData.Show_Card_Title + "'";
-                if (birthData.Show_Card_Title)
-                {
-                    itemdata += " ,'Card_Title': '" + birthData.Card_Title + "'";
-                }
-                itemdata += " ,'Background_Color': '" + birthData.Background_Color + "'";
-                itemdata += " ,'Font_Color': '" + birthData.Font_Color + "'";
-
-                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult updateAnniversarySet(INT_SettingModel anniversaryData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " 'Before_Event': '" + anniversaryData.Before_Event + "'";
-                itemdata += " ,'After_Event': '" + anniversaryData.After_Event + "'";
-                itemdata += " ,'Show_Card_Title': '" + anniversaryData.Show_Card_Title + "'";
-                if (anniversaryData.Show_Card_Title)
-                {
-                    itemdata += " ,'Card_Title': '" + anniversaryData.Card_Title + "'";
-                }
-                itemdata += " ,'Background_Color': '" + anniversaryData.Background_Color + "'";
-                itemdata += " ,'Font_Color': '" + anniversaryData.Font_Color + "'";
-
-                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(anniversaryData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult updateCardSet(List<INT_SettingModel> cardData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                foreach (INT_SettingModel item in cardData)
-                {
-                    string itemdata = " 'Squence': '" + item.Squence + "'";
-                    itemdata += " ,'Active': '" + item.Active + "'";
-                    returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(item.ID));
-                }
-
-                //returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(birthData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult updateAwardSet(INT_SettingModel awardData)
-        {
-            List<object> obj = new List<object>();
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
-            using (var clientContext = spContext.CreateUserClientContextForSPHost())
-            {
-                string returnID = "0";
-
-                string itemdata = " ,'Background_Color': '" + awardData.Background_Color + "'";
-                itemdata += " ,'Font_Color': '" + awardData.Font_Color + "'";
-
-                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(awardData.ID));
-                if (returnID != "0")
-                    obj.Add("OK");
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
-        }
+        
 
     }
 }

@@ -17,6 +17,17 @@ body {
     z-index: 9999999 !important;
 }
 
+.loader-Label{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    top: 38%;
+    left: 0;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+}
+
 .event-cards-fixedHeight {
     height: 170px !important;
 }
@@ -54,6 +65,7 @@ body {
     margin-left: 0.2% !important;
     border-bottom: 1px solid #c7c3c3 !important;
 }
+
 .modelClose {
     position: fixed;
     bottom: 20px;

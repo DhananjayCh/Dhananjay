@@ -12,9 +12,10 @@ var popupData = [
     { 'popup_For': 'Event_SettingPop', 'modelBody': '<div class="row row-sm"><div class="col-lg-12 bottom-border"><label for="Event_Setting"><h3>Event Setting</h3><span class="text-muted card-sub-title">(Please click on save after your chnages, So changes get reflected)</span></label></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label for="Start_Before">Show Before Date</label><input type="text" class="form-control" id="Start_Before" placeholder="Enter days"></div></div><div class="col-lg-6 pd-t-15"><div class="form-group"><label for="Start_After">Show After Date</label><input type="text" class="form-control" id="Start_After" placeholder="Enter days"></div></div></div>' },
     { 'popup_For': 'Pages', 'modelBody': '<div class="row row-sm"><div class="col-lg-12"><div class="form-group"><label for="Page_Name">Page Name</label><input type="text" class="form-control" id="Page_Name" placeholder="Page Name"><label for="Page_NameUrl" class="text-muted card-sub-title">(Page Url(eg.) :- www.demosite.com/pages.aspx?<span id="url_Created"></span>)</label></div></div><div class="col-lg-6"><div class="form-group"><label for="Page_Title">Page Title</label><input type="text" class="form-control" id="Page_Title" placeholder="Page_Title"></div></div><div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="Active">Active</label><div class="main-toggle mg-l-20" id="active_Check"><span></span></div></div></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Content">Page Content</label><div id="summernote"></div></div></div><div class="col-lg-12"><div class="form-group"><label for="Page_Type">Page Type</label><select class="form-control select3" id="Page_Type"><option label="Choose one"></option><option value="Full Page Content">Full Page Content</option><option value="Right Page Content">Right Page Content</option><option value="Left Page Content">Left Page Content</option></select></div></div><div class="col-lg-5" id="Widget_Div" style="display:none"><div class="form-group"><label for="Widget Name">Widget Name</label><select class="form-control select3" id="Widget_Name"></select></div></div><div class="col-lg-6" id="Pinned_Content_Div" style="display:none"><div class="form-group"><label for="Page_Type">Select To Pinned</label><select class="form-control multiSelectDrop" id="Pinned_Content" multiple="multiple"></select></div></div><div class="col-lg-1 margin_T_B_A" id="widgetAddRow" style="display:none"><i class="fas fa-plus text-primary mr-2 pointerCursor" id="widgetAddClick" data-toggle="tooltip" title="Add" data-placement="top" data-original-title="Add"></i></div><div class="col-lg-12" id="widgetTable" style="display:none"><div class="table-responsive"><table class="table mg-b-0 text-md-nowrap"><thead><tr><th>#</th><th>Widget Name</th><th>Sequence</th><th>Pinned Item</th><th>Action</th></tr></thead><tbody id="widgetTrBody"></tbody></table></div></div><div class="col-lg-12"><button type="button" class="btn btn-primary" id="previewBtn">Preview</button></div></div>' },
     { 'popup_For': 'Menu', 'modelBody': '<div class="row row-sm"> <div class="col-lg-12"><div class="form-group"><label for="Menu_Title">Menu Title</label><input type="text" class="form-control" id="Menu_Title" placeholder="Enter Menu Title" /></div></div> <div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="IsInternalUrl">Is This Internal Url</label><div class="main-toggle mg-l-20" id="IsInternalUrl"><span></span></div></div></div></div> <div class="col-lg-6" id="Internal_Pages_Div" style="display:none"><div class="form-group"><label for="Internal_Pages">Internal Pages</label><select class="form-control select2" id="Internal_Pages"><option label="Choose one"></option><option value="Employee 1">Page 1</option></select></div></div> <div class="col-lg-12" id="Menu_Url_Div"><div class="form-group"><label for="Menu_URL">URL</label><input type="text" class="form-control" id="Menu_URL" placeholder="Enter Url" /></div></div> <div class="col-lg-6 margin_T_B_A"><div class="form-group mg-b-0"><div class="main-toggle-group-demo yes-toggle"><label for="Article_Pinned">Is This Child Menu</label><div class="main-toggle mg-l-20" id="IsChildMenu"><span></span></div></div></div></div> <div class="col-lg-6" id="Parent_Menu_Div" style="display:none"><div class="form-group"><label for="Parent_Menu">Parent Menu</label><select class="form-control select2" id="ParentMenuSelect"><option label="Choose one"></option><option value="Employee 1">Employee 1</option></select></div></div> <div class="col-lg-12"><div class="form-group"><label for="Menu_Order">Order</label><input type="text" class="form-control" id="Menu_Order" placeholder="Enter Menu_Order" /></div></div> <div class="col-lg-6"><div class="form-group"><div class="main-toggle-group-demo yes-toggle"><label for="Next_Tab">Open in Next Tab</label><div class="main-toggle mg-l-20" id="Next_Tab"><span></span></div></div></div></div> <div class="col-lg-6"><div class="form-group"><div class="main-toggle-group-demo yes-toggle"><label for="Active">Active</label><div class="main-toggle mg-l-20" id="active_Check"><span></span></div></div></div></div></div>' },
+    { 'popup_For': 'Awards_Types', 'modelBody': '<div class="row row-sm"><div class="col-lg-12"><div class="form-group"><label for="Menu_Title">Award Type</label><input type="text" class="form-control" id="Award_Type" placeholder="Enter Award Type" /></div></div><div class="col-lg-6"><div class="form-group"><div class="main-toggle-group-demo yes-toggle"><label for="Active">Active</label><div class="main-toggle mg-l-20" id="active_Check"><span></span></div></div></div></div></div>  ' },
 ]
 
-   
+ 
 
 var fileDataBuffer = [];
 
@@ -173,6 +174,9 @@ function bindEdit(data, bindFor) {
             $('#show_card_Title').addClass('on');
             $(".card_Title_Div").show();
             $("#Card_Title").val(data.Card_Title);
+            $("#cardStructure").addClass("ribbon ribbon-clip ribbon-left");
+            $(".ribbion_Ti").empty().append(data.Card_Title);
+            $("#card_ribbion").show();
         }
         if (data.Background_Color != null && data.Background_Color != "") {
             $("#colorpicker1").spectrum("set", data.Background_Color);
@@ -191,7 +195,10 @@ function bindEdit(data, bindFor) {
         if (data.Show_Card_Title) {
             $('#show_card_Title').addClass('on');
             $(".card_Title_Div").show();
-            $("#Card_Title").val(data.Card_Title); 
+            $("#Card_Title").val(data.Card_Title);
+            $("#cardStructure").addClass("ribbon ribbon-clip ribbon-left");
+            $(".ribbion_Ti").empty().append(data.Card_Title);
+            $("#card_ribbion").show();
         }
         if (data.Background_Color != null && data.Background_Color != "") {
             $("#colorpicker1").spectrum("set", data.Background_Color);
@@ -221,9 +228,11 @@ function bindEdit(data, bindFor) {
     } else if (bindFor == "Pages") {
 
         $("#Page_Name").val(data.Page_Name);
+        $("#Page_Name").attr('data-previous', data.Page_Name);
         $("#url_Created").empty().append(data.Page_Name);
         $("#Page_Title").val(data.Page_Title);
         $("#Page_Type").val(data.Page_Type);
+        $("#Widget_Name").empty().append(data.SettDropData);
         if (data.Page_Type != "Full Page Content") {
             $("#widgetTrBody").empty().append(data.widgetBody);
             $("#widgetTable").show();
@@ -235,7 +244,40 @@ function bindEdit(data, bindFor) {
         }
 
         $("#summernote").html(data.Page_Content);
-    } 
+    } else if (bindFor == "Menu") {
+
+        $("#Menu_Title").val(data.MenuName);
+        $("#Menu_Order").val(data.OrderNo);
+        $("#Internal_Pages").empty().append(data.pagesData);
+        $("#ParentMenuSelect").empty().append(data.parentMenuData);
+        if (!data.External_Url) {
+            $('#IsInternalUrl').addClass('on');
+            var InternalPages = data.URL.split('?')[1];
+            $("#Internal_Pages").val(InternalPages);
+            $("#Internal_Pages_Div").show();
+            $("#Menu_Url_Div").hide();
+        } else {
+            $("#Menu_URL").val(data.URL);
+        }
+        if (data.ParentMenuIdId != null && data.ParentMenuIdId != "0") {
+            $('#IsChildMenu').addClass('on');
+            $("#ParentMenuSelect").val(data.ParentMenuIdId);
+            $("#Parent_Menu_Div").show();
+        }
+        if (data.Next_Tab) {
+            $('#Next_Tab').addClass('on');
+        }
+        if (data.Active) {
+            $('#active_Check').addClass('on');
+        }
+
+        $("#summernote").html(data.Page_Content);
+    } else if (bindFor == "Awards_Types") {
+        $("#Award_Type").val(data.Award_type);
+        if (data.Active) {
+            $('#active_Check').addClass('on');
+        }
+    }
 }
 
 

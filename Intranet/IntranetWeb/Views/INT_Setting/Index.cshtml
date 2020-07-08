@@ -69,6 +69,7 @@
                                 <li data-title="Notice">Notice</li>
                                 <li data-title="Event">Event</li>
                                 <li data-title="Slider">Slider</li>
+                                <li data-title="Awards_Types">Award Types</li>
                                 <li data-title="Awards">Awards</li>
                                 <li data-title="Photo Gallery">Photo Gallery</li>
                                 <li data-title="Pages">Page</li>
@@ -256,6 +257,44 @@
                                                             <td>
                                                                 <div class="btn-icon-list">
                                                                     <button class="btn btn-icon-list" ng-click="editPopUp(s,'Slider')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Awards_Types">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="awardTypeDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">ID</th>
+                                                            <th class="border-bottom-0">Award Type</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="awt in awardTypeData">
+                                                            <td>{{awt.ID}}</td>
+                                                            <td>{{awt.Award_type}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{awt.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{awt.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(awt,'Awards_Types')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -492,108 +531,14 @@
     <div class="modal left fade" id="exampleModalRight" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div id="global-loaderPopup">
+                <label class="loader-Label" id="rightPopupLoaderLabel"></label>
                 <img src="../assets/img/loader.svg" class="loader-img" alt="Loader">
             </div>
 
             <div class="modal-content">
                 <div class="modal-body" style="overflow-y: scroll; max-height:90%;">
-                    @*<div class="row row-sm">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="Menu_Title">Menu Title</label>
-                                <input type="text" class="form-control" id="Menu_Title" placeholder="Enter Menu Title">
-                            </div>
-                        </div>
+                    
 
-                        <div class="col-lg-6 margin_T_B_A">
-                            <div class="form-group mg-b-0">
-                                <div class="main-toggle-group-demo yes-toggle">
-                                    <label for="IsInternalUrl">Is This Internal Url</label>
-                                    <div class="main-toggle mg-l-20" id="IsInternalUrl">
-                                        <span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6" id="Internal_Pages_Div" style="display:none">
-                            <div class="form-group">
-                                <label for="Internal_Pages">Internal Pages</label>
-                                <select class="form-control select2" id="Internal_Pages">
-                                    <option label="Choose one"></option>
-                                    <option value="Employee 1">Page 1</option>
-                                    <option value="Employee 2">Page 2</option>
-                                    <option value="Employee 3">Page 3</option>
-                                    <option value="Employee 4">Page 4</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12" id="Menu_Url_Div">
-                            <div class="form-group">
-                                <label for="Menu_URL">URL</label>
-                                <input type="text" class="form-control" id="Menu_URL" placeholder="Enter Url">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 margin_T_B_A">
-                            <div class="form-group mg-b-0">
-                                <div class="main-toggle-group-demo yes-toggle">
-                                    <label for="Article_Pinned">Is This Child Menu</label>
-                                    <div class="main-toggle mg-l-20" id="IsChildMenu">
-                                        <span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6" id="Parent_Menu_Div" style="display:none">
-                            <div class="form-group">
-                                <label for="Parent_Menu">Parent Menu</label>
-                                <select class="form-control select2" id="ParentMenuSelect">
-                                    <option label="Choose one"></option>
-                                    <option value="Employee 1">Employee 1</option>
-                                    <option value="Employee 2">Employee 2</option>
-                                    <option value="Employee 3">Employee 3</option>
-                                    <option value="Employee 4">Employee 4</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="Menu_Order">Order</label>
-                                <input type="text" class="form-control" id="Menu_Order" placeholder="Enter Menu_Order">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="main-toggle-group-demo yes-toggle">
-                                    <label for="Next_Tab">Open in Next Tab</label>
-                                    <div class="main-toggle mg-l-20" id="Next_Tab">
-                                        <span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="main-toggle-group-demo yes-toggle">
-                                    <label for="Active">Active</label>
-                                    <div class="main-toggle mg-l-20" id="active_Check">
-                                        <span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>*@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveActionData" data-saveType="" data-operation="" data-updateId="">Save</button>

@@ -24,10 +24,15 @@ namespace IntranetWeb.BAL.Intranet
             jArray = restService.GetAllItemFromList(clientContext, "INT_PagesTx", rESTOption);
             return jArray;
         }
-        public List<INT_PagesTxModel> GetPagesData(ClientContext clientContext)
+        public List<INT_PagesTxModel> GetPagesData(ClientContext clientContext, string pageName)
         {
             List<INT_PagesTxModel> PagesData = new List<INT_PagesTxModel>();
             string filter = "";
+            if (pageName != null && pageName != "")
+            {
+                filter = "(Page_Name eq '" + pageName + "')";
+            }
+            
             JArray jArray = RESTGet(clientContext, filter);
             foreach (JObject j in jArray)
             {

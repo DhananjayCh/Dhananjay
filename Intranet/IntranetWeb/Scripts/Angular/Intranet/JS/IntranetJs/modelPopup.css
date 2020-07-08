@@ -30,6 +30,7 @@
 .modal.right.fade.show .modal-dialog {
 	right: 0;
 }
+
 @media (max-width: 576px) {
 	.modal.left .modal-dialog {
 		position:fixed;

@@ -292,9 +292,11 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 
 		var elementD = "<div class='card bg-purple-gradient' id='cardStructure'>" +
 			"<div class='card-body event-cards-fixedHeight'>" +
-			"<div id='myCarousel' class='carousel slide event-cards-internal-fixedHeight' data-ride='carousel'>" +
-			"<ol class='carousel-indicators' > " + this.createindicator(d,'myCarousel')+"</ol >"+
-			"<div class='carousel-inner'>" + this.createAwardsLoop(d) + "</div>" +
+			"<div id='myCarousel' class='carousel slide event-cards-internal-fixedHeight' data-ride='carousel'>";
+			if (d.length > 1) {
+				elementD += "<ol class='carousel-indicators' > " + this.createindicator(d, 'myCarousel') + "</ol >";
+			}
+			elementD += "<div class='carousel-inner'>" + this.createAwardsLoop(d) + "</div>" +
 			"</div>" +
 			"</div>" +
 			"</div>";
@@ -356,7 +358,6 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 			"</div>" +
 			"<div class='card-body pd-b-0'>" +
 			"<div id='myCarousel2' class='carousel slide' data-ride='carousel'>" +
-			"<ol class='carousel-indicators mg-b-0'><li class='carousel-item active' data-slide-to='0'  data-target='#myCarousel2'></li></ol >" +
 			"<div class='carousel-inner pd-b-20'> " +
 			"<div class='" + this.BindBirthdayClass(0) + "'>" +
 			"<div class='row pd-t-10'>" +
@@ -392,7 +393,6 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 			"</div>" +
 			"<div class='card-body pd-b-0'>" +
 			"<div id='myCarousel3' class='carousel slide' data-ride='carousel'>" +
-			"<ol class='carousel-indicators mg-b-0'><li class='carousel-item active' data-slide-to='0'  data-target='#myCarousel3'></li></ol >" +
 			"<div class='carousel-inner pd-b-20'> " +
 			"<div class='" + this.BindBirthdayClass(0) + "'>" +
 			"<div class='row pd-t-10'>" +
