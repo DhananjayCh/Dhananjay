@@ -13,5 +13,8 @@ namespace IntranetWeb.Models.Intranet
         public string Author { get; set; }
         public string CreatedDate { get; set; }
         public bool Active { get; set; }
+        public bool Next_Tab { get; set; }
+        public bool Is_Internal { get; set; }
+        public bool Pinned_Homepage { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿var settingApp = angular.module('settingApp', ['CommonAppUtility','widgetapp'])
+﻿var settingApp = angular.module('settingApp', ['CommonAppUtility', 'widgetapp'])
 
 settingApp.controller('settingController', function ($scope, $http, $compile, CommonAppUtilityService) {
     $scope.NoticeData = [];
@@ -16,6 +16,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $scope.widgetCollection = [];
     $scope.PagesData = [];
     $scope.awardTypeData = [];
+    $scope.HolidayListData = [];
 
     var noticeDoc = {};
 
@@ -111,7 +112,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
         })
 
-       
+
     }
 
     function getEvent(loadFresh) {
@@ -247,7 +248,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                             $("#global-loader").fadeOut("slow");
                         }, 500);
                     }
-                   
+
 
                 }
                 console.log(response);
@@ -256,7 +257,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         })
     }
 
-    function getPagesData(loadFresh,d) {
+    function getPagesData(loadFresh, d) {
         console.log(new Date());
         return new Promise(function (resolve, reject) {
             var passD = "";
@@ -307,6 +308,52 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         })
     }
 
+    function getQuickLinkData(loadFresh) {
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getQuicklink", '').then(function (response) {
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.QuickLinkData = response.data;
+                        console.log($scope.QuickLinkData)
+                        $('#QuickLinkDataTable').DataTable().clear();
+                        $('#QuickLinkDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('QuickLinkDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
+
+            });
+
+        })
+    }
+
+    function getHolidayListData(loadFresh) {
+        return new Promise(function (resolve, reject) {
+            CommonAppUtilityService.CreateItem("/INT_Setting/getHolidayListData", '').then(function (response) {
+                if (response.status == 200) {
+                    resolve(response.data);
+                    if (loadFresh) {
+                        $scope.HolidayListData = response.data;
+                        console.log($scope.HolidayListData)
+                        $('#HolidayListDataTable').DataTable().clear();
+                        $('#HolidayListDataTable').DataTable().destroy();
+                        setTimeout(function () {
+                            $scope.$apply();
+                            bindDataTable('HolidayListDataTable');
+                            $("#global-loader").fadeOut("slow");
+                        }, 500);
+                    }
+                }
+
+            });
+
+        })
+    }
+
 
     function getSettingBy(SettingFor) {
         var data;
@@ -332,38 +379,49 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     }
 
-    
+
     $(document).on('click', '#previewBtn', function () {
-        if ($("#Page_Type").val() != "") {
-            if ($("#Page_Type").val() == "Full Page Content") {
-                $(".rightPageDiv").hide();
-                $(".leftPageDiv").hide();
-                $(".fullPageDiv").show();
-                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
-                $("#fullPageDivCol").empty().append($('.note-editable').html());
-            } else if ($("#Page_Type").val() == "Right Page Content") {
-                $(".fullPageDiv").hide();
-                $(".leftPageDiv").hide();
-                $(".rightPageDiv").show();
-                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
-                $("#rightPageDivCol").empty().append($('.note-editable').html());
-                $("#rightpWidget").empty();
-                $("#leftWidget").empty();
-                $scope.testdemoRight($scope.widgetCollection);
-            } else if ($("#Page_Type").val() == "Left Page Content") {
-                $(".fullPageDiv").hide();
-                $(".rightPageDiv").hide();
-                $(".leftPageDiv").show();
-                $("#TitlePageDivCol").empty().append($("#Page_Title").val());
-                $("#lefttPageDivCol").empty().append($('.note-editable').html());
-                $("#rightpWidget").empty();
-                $("#leftWidget").empty();
-                $scope.testdemoLeft($scope.widgetCollection);
+        clearErrorClass();
+        var articleValidateArray = [
+            { 'id': 'Page_Name', 'message': 'Please Enter Page Name', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'Page_Title', 'message': 'Please Enter Page Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'note-editable', 'message': 'Please Enter Page Content', 'type': 'richtextbox', 'selector_Type': 'class', 'parent_Id': 'note-editor' },
+
+        ]
+        if (validateSave(articleValidateArray)) {
+            if ($("#Page_Type").val() != "") {
+                if ($("#Page_Type").val() == "Full Page Content") {
+                    $(".rightPageDiv").hide();
+                    $(".leftPageDiv").hide();
+                    $(".fullPageDiv").show();
+                    $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                    $("#fullPageDivCol").empty().append($('.note-editable').html());
+                } else if ($("#Page_Type").val() == "Right Page Content") {
+                    $(".fullPageDiv").hide();
+                    $(".leftPageDiv").hide();
+                    $(".rightPageDiv").show();
+                    $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                    $("#rightPageDivCol").empty().append($('.note-editable').html());
+                    $("#rightpWidget").empty();
+                    $("#leftWidget").empty();
+                    $scope.testdemoRight($scope.widgetCollection);
+                } else if ($("#Page_Type").val() == "Left Page Content") {
+                    $(".fullPageDiv").hide();
+                    $(".rightPageDiv").hide();
+                    $(".leftPageDiv").show();
+                    $("#TitlePageDivCol").empty().append($("#Page_Title").val());
+                    $("#lefttPageDivCol").empty().append($('.note-editable').html());
+                    $("#rightpWidget").empty();
+                    $("#leftWidget").empty();
+                    $scope.testdemoLeft($scope.widgetCollection);
+                }
+                //$scope.testdemoFull($("#Widget_Name").val(), $("#Pinned_Content").val());
+                $("#exampleModalFull").modal('show');
+            } else {
+                $("#Page_Type").parent().append("<label class='error'>Please Select Page Type</label>");
+                $("#Page_Type").addClass('errorBorderRichText');
             }
-            //$scope.testdemoFull($("#Widget_Name").val(), $("#Pinned_Content").val());
-            $("#exampleModalFull").modal('show');
         }
-        
     });
     $(document).on('click', '#lightgallery', function () {
 
@@ -394,71 +452,137 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     $(document).on('click', '#RemoveWidget', function () {
         var id = $(this).attr("data-Id");
-       
+
         $scope.widgetCollection = $scope.widgetCollection.filter(function (item) {
-                return item.PinnedId != id
-            
+            return item.PinnedId != id
+
         })
         console.log($scope.widgetCollection);
         var tbody = createTableBodyW($scope.widgetCollection);
 
         $("#widgetTrBody").empty().append(tbody);
         $("#widgetTable").show();
+        if ($scope.widgetCollection.length == 0) {
+            $("#widgetTable").hide();
+        }
     });
 
     $(document).on('click', '#widgetAddClick', function () {
-        if ($("#Widget_Name").val() == "Quick Link") {
-            var idArray = [];
-            $("#Pinned_Content option:selected").each(function (index) {
-                var $this = $(this);
-                idArray.push({
-                    ID: $this.val(),
-                })
-            });
+        clearErrorClass();
+        var articleValidateArray = [
+            { 'id': 'Page_Name', 'message': 'Please Enter Page Name', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'Page_Title', 'message': 'Please Enter Page Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'note-editable', 'message': 'Please Enter Page Content', 'type': 'richtextbox', 'selector_Type': 'class', 'parent_Id': 'note-editor' },
 
-            $scope.widgetCollection.push({
-                "widgetName": $("#Widget_Name").val(),
-                "PinnedId": "qw" + ($scope.widgetCollection.length + 1),
-                "PiinedData": '',
-                "Squence": ($scope.widgetCollection.length + 1),
-                "idArray": idArray,
-            })
+        ]
+        if (validateSave(articleValidateArray)) {
+            if ($("#Widget_Name").val() == "" || $("#Widget_Name").val() == null) {
+                $("#Widget_Name").parent().append("<label class='error'>Please Select Widget</label>");
+                $("#Widget_Name").addClass('errorBorderRichText');
+                return false;
+            }
+            else {
+                if (checkPageWidgetType($("#Widget_Name").val())) {
+                    if (checkPageWidgetDuplicate($("#Widget_Name").val())) {
+                        if ($("#Widget_Name").val() == "Quick Link") {
+                            var idArray = [];
+                            $("#Pinned_Content option:selected").each(function (index) {
+                                var $this = $(this);
+                                idArray.push({
+                                    ID: $this.val(),
+                                })
+                            });
 
-        } else if ($("#Widget_Name").val() == "Event" || $("#Widget_Name").val() == "Awards" || $("#Widget_Name").val() == "Birthday" || $("#Widget_Name").val() == "Anniversary" || $("#Widget_Name").val() == "Holiday List") {
-            $scope.widgetCollection.push({
-                "widgetName": $("#Widget_Name").val(),
-                "PinnedId": "e" + ($scope.widgetCollection.length + 1),
-                "PiinedData": '',
-                "Squence": ($scope.widgetCollection.length + 1),
-                "idArray": [],
-            })
-        }else {
+                            $scope.widgetCollection.push({
+                                "widgetName": $("#Widget_Name").val(),
+                                "PinnedId": "qw" + ($scope.widgetCollection.length + 1),
+                                "PiinedData": '',
+                                "Squence": ($scope.widgetCollection.length + 1),
+                                "idArray": idArray,
+                            })
 
-            $("#Pinned_Content option:selected").each(function (index) {
-                var $this = $(this);
+                        } else if ($("#Widget_Name").val() == "Event" || $("#Widget_Name").val() == "Awards" || $("#Widget_Name").val() == "Birthday" || $("#Widget_Name").val() == "Anniversary" || $("#Widget_Name").val() == "Holiday List") {
+                            $scope.widgetCollection.push({
+                                "widgetName": $("#Widget_Name").val(),
+                                "PinnedId": "e" + ($scope.widgetCollection.length + 1),
+                                "PiinedData": '',
+                                "Squence": ($scope.widgetCollection.length + 1),
+                                "idArray": [],
+                            })
+                        } else {
 
-                $scope.widgetCollection.push({
-                    "widgetName": $("#Widget_Name").val(),
-                    "PinnedId": $this.val(),
-                    "PiinedData": $this.text(),
-                    "Squence": ($scope.widgetCollection.length + 1),
-                    "idArray": [],
-                })
-            });
+                            $("#Pinned_Content option:selected").each(function (index) {
+                                var $this = $(this);
+
+                                $scope.widgetCollection.push({
+                                    "widgetName": $("#Widget_Name").val(),
+                                    "PinnedId": $this.val(),
+                                    "PiinedData": $this.text(),
+                                    "Squence": ($scope.widgetCollection.length + 1),
+                                    "idArray": [],
+                                })
+                            });
+                        }
+
+                        var tbody = createTableBodyW($scope.widgetCollection);
+
+                        $("#widgetTrBody").empty().append(tbody);
+                        $("#widgetTable").show();
+                        console.log($scope.widgetCollection);
+                    }
+                }
+            }
         }
-        
-        var tbody = createTableBodyW($scope.widgetCollection);
 
-        $("#widgetTrBody").empty().append(tbody);
-        $("#widgetTable").show();
-        console.log($scope.widgetCollection);
-        
+
     });
+
+    function checkPageWidgetType(WidgetType) {
+        var retrurndata = true;
+        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List") {
+            if ($("#Pinned_Content option:selected").length <= 0) {
+                $("#Pinned_Content").parent().append("<label class='error'>Please Select Pinned Content</label>");
+                $("#Pinned_Content").addClass('errorBorderRichText');
+                retrurndata = false;
+            }
+        }
+
+        return retrurndata;
+    }
+
+    function checkPageWidgetDuplicate(WidgetType) {
+        var retrurndata = true;
+        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List") {
+            $("#Pinned_Content option:selected").each(function (index) {
+                var $this = $(this);
+                var dupPresnt = [];
+                dupPresnt = $scope.widgetCollection.filter(function (e) {
+                    return (e.widgetName == WidgetType && e.PinnedId == $this.val())
+                })
+                if (dupPresnt.length > 0) {
+                    triggerNotify("This selection combination already present, Please try to add unique", "left")
+                    retrurndata = false;
+                }
+            });
+
+        } else {
+            var dupPresnt = [];
+            dupPresnt = $scope.widgetCollection.filter(function (e) {
+                return (e.widgetName == WidgetType)
+            })
+            if (dupPresnt.length > 0) {
+                triggerNotify("This selection combination already present, Please try to add unique", "left")
+                retrurndata = false;
+            }
+        }
+
+        return retrurndata;
+    }
 
     function createTableBodyW(data) {
         var tbody = "";
         for (var i = 0; i < data.length; i++) {
-            tbody += '<tr><th scope="row">' + (i + 1) + '</th><td>' + data[i].widgetName + '</td><td><input type="text" data-Id="' + i + '" class="form-control squencetxtWidget" value="' + data[i].Squence+'"/></td><td>' + data[i].PiinedData + '</td><td><i class="si si-trash text-danger mr-2 pointerCursor" data-Id="' + data[i].PinnedId + '" Id="RemoveWidget" title="Delete"></i></td></tr>'
+            tbody += '<tr><th scope="row">' + (i + 1) + '</th><td>' + data[i].widgetName + '</td><td><input type="text" data-Id="' + i + '" class="form-control squencetxtWidget" value="' + data[i].Squence + '"/></td><td>' + data[i].PiinedData + '</td><td><i class="si si-trash text-danger mr-2 pointerCursor" data-Id="' + data[i].PinnedId + '" Id="RemoveWidget" title="Delete"></i></td></tr>'
         }
         return tbody;
     }
@@ -504,7 +628,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
     });
 
-   // getQuickLink(loadFresh)
+    // getQuickLink(loadFresh)
 
     function getEmpData() {
         console.log("EmpData");
@@ -537,8 +661,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             getNavigationMenuData(true);
         } else if ($(this).attr('data-title') == "Awards_Types") {
             getAwardType(true);
+        } else if ($(this).attr('data-title') == "Quick_Link") {
+            getQuickLinkData(true);
+        } else if ($(this).attr('data-title') == "Holiday_List") {
+            getHolidayListData(true);
         } else {
-            $("#global-loader").fadeOut("slow"); 
+            $("#global-loader").fadeOut("slow");
         }
     })
 
@@ -554,10 +682,16 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             });
         } else if (tab_Clicked == "Menu") {
             $scope.widgetCollection = [];
-            getPagesData(false,'').then(function (response) {
+            getPagesData(false, '').then(function (response) {
                 var dropData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
                 var dropData1 = createDropdownData($scope.MenuData, 'ID', 'MenuName', '', true, true);
                 oprnPopupByClick(tab_Clicked, dropData, dropData1);
+            });
+        } else if (tab_Clicked == "Quick_Link") {
+            $scope.widgetCollection = [];
+            getPagesData(false, '').then(function (response) {
+                var dropData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
+                oprnPopupByClick(tab_Clicked, dropData);
             });
         } else {
             oprnPopupByClick(tab_Clicked);
@@ -611,73 +745,105 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     $(document).on('click', '#saveActionData', function () {
         if ($(this).attr('data-saveType') == "Article") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveArticle('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveArticle('edit');
             }
         } else if ($(this).attr('data-saveType') == "Event") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveEvent('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveEvent('edit');
             }
         } else if ($(this).attr('data-saveType') == "Notice") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveNotice('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveNotice('edit');
             }
         } else if ($(this).attr('data-saveType') == "Slider") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveSlider('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveSlider('edit');
             }
         } else if ($(this).attr('data-saveType') == "Gallery") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveGallery('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveGallery('edit');
             }
         } else if ($(this).attr('data-saveType') == "Award") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveAwards('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveAwards('edit');
             }
         } else if ($(this).attr('data-saveType') == "Awards_Types") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveAwards_Types('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveAwards_Types('edit');
             }
         } else if ($(this).attr('data-saveType') == "Birthday_SettingPop") {
+            clearErrorClass();
             saveBirthdaySetting('edit');
         }
         else if ($(this).attr('data-saveType') == "Anniversary_SettingPop") {
+            clearErrorClass();
             saveAnniversarySetting('edit');
         } else if ($(this).attr('data-saveType') == "Card_SettingPop") {
+            clearErrorClass();
             saveCardSetting('edit');
         } else if ($(this).attr('data-saveType') == "Award_SettingPop") {
+            clearErrorClass();
             saveAwardetting('edit');
         } else if ($(this).attr('data-saveType') == "Pages") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 savePages('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 savePages('edit');
             }
         } else if ($(this).attr('data-saveType') == "Menu") {
+            clearErrorClass();
             if ($(this).attr('data-operation') == "Save") {
                 saveMenu('save');
             } else if ($(this).attr('data-operation') == "edit") {
                 saveMenu('edit');
             }
+        } else if ($(this).attr('data-saveType') == "Quick_Link") {
+            clearErrorClass();
+            if ($(this).attr('data-operation') == "Save") {
+                saveQuicklink('save');
+            } else if ($(this).attr('data-operation') == "edit") {
+                saveQuicklink('edit');
+            }
+        } else if ($(this).attr('data-saveType') == "Holiday_List") {
+            clearErrorClass();
+            if ($(this).attr('data-operation') == "Save") {
+                saveHolidayList('save');
+            } else if ($(this).attr('data-operation') == "edit") {
+                saveHolidayList('edit');
+            }
         }
 
     });
 
-/**********************Menu Operation start***************************/
+    function clearErrorClass() {
+        $('label.error').remove();
+        $(".errorBorderRichText").removeClass("errorBorderRichText");
+    }
+
+    /**********************Menu Operation start***************************/
     $(document).on('click', '#IsInternalUrl', function () {
         if ($(this).hasClass('on')) {
             $("#Internal_Pages_Div").show();
@@ -700,10 +866,38 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
         var articleValidateArray = [
             { 'id': 'Menu_Title', 'message': 'Please Enter Menu Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
-
-
         ]
+
         if (validateSave(articleValidateArray)) {
+
+            if ($('#IsInternalUrl').hasClass('on')) {
+                if ($("#Internal_Pages").val() == "" || $("#Internal_Pages").val() == null) {
+                    $("#Internal_Pages").parent().append("<label class='error'>Please Select Internal Page</label>");
+                    $("#Internal_Pages").addClass('errorBorderRichText');
+                    return false;
+                }
+            } else {
+                if ($("#Menu_URL").val() == "" || $("Menu_URL").val() == null) {
+                    $("#Menu_URL").parent().append("<label class='error'>Enter Url</label>");
+                    $("#Menu_URL").addClass('errorBorderRichText');
+                    return false;
+                }
+            }
+
+            if ($('#IsChildMenu').hasClass('on')) {
+                if ($("#ParentMenuSelect").val() == "" || $("#ParentMenuSelect").val() == null) {
+                    $("#ParentMenuSelect").parent().append("<label class='error'>Please Select Internal Page</label>");
+                    $("#ParentMenuSelect").addClass('errorBorderRichText');
+                    return false;
+                }
+            }
+
+            if ($("#Menu_Order").val() == "" || $("#Menu_Order").val() == null) {
+                $("#Menu_Order").parent().append("<label class='error'>Please Select Internal Page</label>");
+                $("#Menu_Order").addClass('errorBorderRichText');
+                return false;
+            }
+
             $("#exampleModalRight").modal('hide');
             $("#global-loader").fadeIn("slow");
             callMenu(processType);
@@ -762,9 +956,132 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
     }
 
-/**********************Menu Operation end***************************/
+    /**********************Menu Operation end***************************/
 
-/**********************Awards Types Operation start***************************/
+    /**********************Quick Link Operation start***************************/
+    function saveQuicklink(processType) {
+
+        var articleValidateArray = [
+            { 'id': 'Quick_Link_Title', 'message': 'Please Enter Quick Link Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+        ]
+        if (validateSave(articleValidateArray)) {
+            if ($('#IsInternalUrl').hasClass('on')) {
+                if ($("#Internal_Pages").val() == "" || $("#Internal_Pages").val() == null) {
+                    $("#Internal_Pages").parent().append("<label class='error'>Please Select Internal Page</label>");
+                    $("#Internal_Pages").addClass('errorBorderRichText');
+                    return false;
+                }
+            } else {
+                if ($("#Quick_Link_Url").val() == "" || $("Quick_Link_Url").val() == null) {
+                    $("#Quick_Link_Url").parent().append("<label class='error'>Enter Url</label>");
+                    $("#Quick_Link_Url").addClass('errorBorderRichText');
+                    return false;
+                }
+            }
+
+            $("#exampleModalRight").modal('hide');
+            $("#global-loader").fadeIn("slow");
+            callQuicklink(processType);
+
+        }
+
+    }
+
+    function callQuicklink(type) {
+        var IsInternalUrl = $('#IsInternalUrl').hasClass('on');
+        var Pinned_Homepage = $("#Pinned_Homepage").hasClass('on');
+        var Next_Tab = $('#Next_Tab').hasClass('on');
+        var activeData = $('#active_Check').hasClass('on');
+        var finalUrl = "#";
+        if (IsInternalUrl) {
+            finalUrl = "/SitePages/Pages.aspx?" + $("#Internal_Pages").val();
+        } else {
+            finalUrl = $("#Quick_Link_Url").val()
+        }
+
+        var data = {
+            'Quick_Link_Title': $("#Quick_Link_Title").val(),
+            'Quick_Link_Url': finalUrl,
+            'Pinned_Homepage': Pinned_Homepage,
+            'Is_Internal': IsInternalUrl,
+            'Next_Tab': Next_Tab,
+            'Active': activeData,
+        }
+
+        if (type == "edit") {
+            data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/UpdateQuicklink", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getQuickLinkData(true);
+                }
+
+            });
+        } else {
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/SaveQuicklink", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getQuickLinkData(true);
+                }
+
+            });
+        }
+    }
+    /**********************Quick Link Operation end***************************/
+
+    /**********************Holiday List Operation start***************************/
+    function saveHolidayList(processType) {
+
+        var articleValidateArray = [
+            { 'id': 'Holiday_Title', 'message': 'Please Enter Holiday Title', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': '' },
+            { 'id': 'dateTimePickerStart', 'message': 'Please Select Holiday Date', 'type': 'textbox', 'selector_Type': 'id', 'parent_Id': 'Holiday_Date' },
+        ]
+        if (validateSave(articleValidateArray)) {
+
+            $("#exampleModalRight").modal('hide');
+            $("#global-loader").fadeIn("slow");
+            callHolidayList(processType);
+
+        }
+
+    }
+
+    function callHolidayList(type) {
+        var activeData = $('#active_Check').hasClass('on');
+
+        var data = {
+            'Holiday_Title': $("#Holiday_Title").val(),
+            'Holiday_Date': moment($('#dateTimePickerStart').val(), 'DD-MM-YYYY').format('MM/DD/YYYY'),
+            'Active': activeData,
+        }
+
+        if (type == "edit") {
+            data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/UpdateHolidayListData", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getHolidayListData(true);
+                }
+
+            });
+        } else {
+
+            CommonAppUtilityService.CreateItem("/INT_Setting/SaveHolidayListData", data).then(function (response) {
+                if (response.data[0] == "OK") {
+                    $('#SuccessModelProject').modal('show');
+                    getHolidayListData(true);
+                }
+
+            });
+        }
+    }
+    /**********************Holiday List Operation end***************************/
+
+
+    /**********************Awards Types Operation start***************************/
     function saveAwards_Types(processType) {
 
         var articleValidateArray = [
@@ -810,7 +1127,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             });
         }
     }
-/**********************Awards Types Operation end***************************/
+    /**********************Awards Types Operation end***************************/
 
     function savePages(processType) {
 
@@ -860,7 +1177,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     }
                 });
             }
-            
+
 
 
         }
@@ -874,7 +1191,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             'Page_Title': $("#Page_Title").val(),
             'Page_Type': $("#Page_Type").val(),
             'Page_Content': $('.note-editable').html(),
-            'Widget_Configuration': JSON.stringify($scope.widgetCollection) ,
+            'Widget_Configuration': JSON.stringify($scope.widgetCollection),
             'Active': activeData,
         }
 
@@ -989,7 +1306,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             if (response.data[0] == "OK") {
                 $("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
-               
+
             }
 
         });
@@ -1661,6 +1978,13 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 $("#global-loader").fadeOut("slow");
                 a.pagesData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
                 a.parentMenuData = createDropdownData($scope.MenuData, 'ID', 'MenuName', '', true, true);
+                inilizeEditpopUp(a, openFor);
+            });
+        } else if (openFor == "Quick_Link") {
+            $("#global-loader").fadeIn("slow");
+            getPagesData(false, '').then(function (response) {
+                $("#global-loader").fadeOut("slow");
+                a.pagesData = createDropdownData(response, 'Page_Name', 'Page_Name', '', true, true);
                 inilizeEditpopUp(a, openFor);
             });
         } else {

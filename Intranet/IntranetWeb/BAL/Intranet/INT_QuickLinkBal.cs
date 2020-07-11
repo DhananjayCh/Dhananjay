@@ -18,7 +18,7 @@ namespace IntranetWeb.BAL.Intranet
             JArray jArray = new JArray();
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
-            rESTOption.select = "ID,Quick_Link_Title,Quick_Link_Url,Active,Created,Author/Title";
+            rESTOption.select = "ID,Quick_Link_Title,Quick_Link_Url,Active,Created,Author/Title,Next_Tab,Is_Internal,Pinned_Homepage";
             rESTOption.expand = "Author";
             rESTOption.top = "5000";
 
@@ -45,10 +45,36 @@ namespace IntranetWeb.BAL.Intranet
                     Quick_Link_Url = j["Quick_Link_Url"].ToString(),
                     Author = j["Author"]["Title"].ToString(),
                     CreatedDate = j["Created"].ToString(),
+                    Pinned_Homepage = (bool)j["Pinned_Homepage"],
+                    Is_Internal = (bool)j["Is_Internal"],
+                    Next_Tab = (bool)j["Next_Tab"],
                     Active = (bool)j["Active"],
                 }); ;
             }
             return QuickLinkData;
+        }
+
+        public string SaveQuickLink(ClientContext clientContext, string ItemData)
+        {
+            string response = RESTSave(clientContext, ItemData);
+            return response;
+        }
+
+        public string UpdateQuickLink(ClientContext clientContext, string ItemData, string ID)
+        {
+            string response = RESTUpdate(clientContext, ItemData, ID);
+            return response;
+        }
+
+        private string RESTUpdate(ClientContext clientContext, string ItemData, string ID)
+        {
+            RestService restService = new RestService();
+            return restService.UpdateItem(clientContext, "INT_QuickLink", ItemData, ID);
+        }
+        private string RESTSave(ClientContext clientContext, string ItemData)
+        {
+            RestService restService = new RestService();
+            return restService.SaveItem(clientContext, "INT_QuickLink", ItemData);
         }
     }
 }

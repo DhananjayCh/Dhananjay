@@ -551,12 +551,6 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-       
-
-
-
-        
-
         public JsonResult getQuicklink(List<INT_QuickLinkModel> recivceData)
         {
             List<INT_QuickLinkModel> QuickLinkData = new List<INT_QuickLinkModel>();
@@ -589,6 +583,54 @@ namespace IntranetWeb.Controllers.Intranet
 
         }
 
+        public JsonResult SaveQuicklink(INT_QuickLinkModel QuickLinkData)
+        {
+
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Quick_Link_Title': '" + QuickLinkData.Quick_Link_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Homepage': '" + QuickLinkData.Pinned_Homepage + "'";
+                itemdata += " ,'Is_Internal': '" + QuickLinkData.Is_Internal + "'";
+                itemdata += " ,'Next_Tab': '" + QuickLinkData.Next_Tab + "'";
+                itemdata += " ,'Active': '" + QuickLinkData.Active + "'";
+
+                returnID = BalQuickLink.SaveQuickLink(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateQuicklink(INT_QuickLinkModel QuickLinkData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Quick_Link_Title': '" + QuickLinkData.Quick_Link_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Pinned_Homepage': '" + QuickLinkData.Pinned_Homepage + "'";
+                itemdata += " ,'Is_Internal': '" + QuickLinkData.Is_Internal + "'";
+                itemdata += " ,'Next_Tab': '" + QuickLinkData.Next_Tab + "'";
+                itemdata += " ,'Active': '" + QuickLinkData.Active + "'";
+
+
+                returnID = BalQuickLink.UpdateQuickLink(clientContext, itemdata, Convert.ToString(QuickLinkData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getHolidayListData(string callType)
         {
             List<INT_HolidayListModel> holidayListData = new List<INT_HolidayListModel>();
@@ -608,6 +650,48 @@ namespace IntranetWeb.Controllers.Intranet
                 return Json(holidayListData, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+        public JsonResult SaveHolidayListData(INT_HolidayListModel HolidayList)
+        {
+
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Holiday_Title': '" + HolidayList.Holiday_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Holiday_Date': '" + HolidayList.Holiday_Date + "'";
+                itemdata += " ,'Active': '" + HolidayList.Active + "'";
+
+                returnID = BalHolidayList.SaveHolidayList(clientContext, itemdata);
+                if (Convert.ToInt32(returnID) > 0)
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateHolidayListData(INT_HolidayListModel HolidayList)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Holiday_Title': '" + HolidayList.Holiday_Title.Replace("'", @"\'") + "'";
+                itemdata += " ,'Holiday_Date': '" + HolidayList.Holiday_Date + "'";
+                itemdata += " ,'Active': '" + HolidayList.Active + "'";
+
+
+                returnID = BalHolidayList.UpdateHolidayList(clientContext, itemdata, Convert.ToString(HolidayList.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult getEmployee()

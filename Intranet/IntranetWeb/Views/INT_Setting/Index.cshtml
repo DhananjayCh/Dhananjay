@@ -35,6 +35,8 @@
     <link href="~/assets/plugins/spectrum-colorpicker/spectrum.css" rel="stylesheet">
 
     <link href="~/assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet" />
+    <!--Internal   Notify -->
+    <link href="~/assets/plugins/notify/css/notifIt.css" rel="stylesheet" />
 
 }
 
@@ -74,6 +76,8 @@
                                 <li data-title="Photo Gallery">Photo Gallery</li>
                                 <li data-title="Pages">Page</li>
                                 <li data-title="Menu">Menu</li>
+                                <li data-title="Quick_Link">Quick Link</li>
+                                <li data-title="Holiday_List">Holiday List</li>
                                 <li data-title="Settings">Settings</li>
                             </ul>
                             <div class="content_wrapper">
@@ -488,6 +492,98 @@
                                     </div>
                                 </div>
                                 <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Quick_Link">Add</button>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="QuickLinkDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">ID</th>
+                                                            <th class="border-bottom-0">Quick Link Title</th>
+                                                            <th class="border-bottom-0">Is Internal</th>
+                                                            <th class="border-bottom-0">URL</th>
+                                                            <th class="border-bottom-0">Next Tab</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="Me in QuickLinkData">
+                                                            <td>{{Me.ID}}</td>
+                                                            <td>{{Me.Quick_Link_Title}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{Me.Is_Internal}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{Me.Is_Internal}}>No</span>
+                                                            </td>
+                                                            <td>{{Me.Quick_Link_Url}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{Me.Next_Tab}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{Me.Next_Tab}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{Me.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{Me.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(Me,'Quick_Link')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
+                                    <div class="d-flex flex-row justify-content-end pd-b-20">
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-info btn-block add_Click" data-Tab="Holiday_List">Add</button>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="HolidayListDataTable" class="table key-buttons text-md-nowrap" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-bottom-0">ID</th>
+                                                            <th class="border-bottom-0">Holiday Title</th>
+                                                            <th class="border-bottom-0">Holiday Date</th>
+                                                            <th class="border-bottom-0">Active</th>
+                                                            <th class="border-bottom-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="hl in HolidayListData">
+                                                            <td>{{hl.ID}}</td>
+                                                            <td>{{hl.Holiday_Title}}</td>
+                                                            <td>{{formatDate(hl.Holiday_Date,'MM/DD/YYYY h:mm:ss a','DD MMM YYYY')}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show={{hl.Active}}>Yes</span>
+                                                                <span class="badge badge-danger" ng-show=!{{hl.Active}}>No</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-icon-list">
+                                                                    <button class="btn btn-icon-list" ng-click="editPopUp(hl,'Holiday_List')" data-toggle="tooltip" title="" data-placement="top" data-original-title="Edit"><i class="si si-pencil text-primary mr-2"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab_content">
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="card">
@@ -537,7 +633,25 @@
 
             <div class="modal-content">
                 <div class="modal-body" style="overflow-y: scroll; max-height:90%;">
-                    
+
+                    <div class="row row-sm">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="Holiday_Title">Holiday Title</label>
+                                <input type="text" class="form-control" id="Holiday_Title" placeholder="Enter Holiday Title" />
+                            </div>
+                        </div>
+                        <div class="col-lg-12"><div class="form-group"><label for="Holiday_Date">Holiday Date</label><div class="input-group" id="Holiday_Date"><div class="input-group-prepend"><div class="input-group-text"><i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i></div></div><input class="form-control" id="dateTimePickerStart" type="text" value=""></div></div></div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="main-toggle-group-demo yes-toggle">
+                                    <label for="Active">Active</label>
+                                    <div class="main-toggle mg-l-20" id="active_Check"><span></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -833,6 +947,10 @@
     <script src="~/assets/plugins/datatable/js/buttons.print.min.js"></script>
     <script src="~/assets/plugins/datatable/js/buttons.colVis.min.js"></script>
     <script src="~/assets/plugins/datatable/js/responsive.bootstrap4.min.js"></script>
+
+    <!--Internal  Notify js -->
+    <script src="~/assets/plugins/notify/js/notifIt.js"></script>
+    <script src="~/assets/plugins/notify/js/notifit-custom.js"></script>
 
     <!--Internal  Datatable js -->
     <script src="~/Scripts/Angular/Intranet/JS/IntranetJs/table-data.js"></script>
