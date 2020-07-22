@@ -49,7 +49,10 @@ namespace IntranetWeb.Controllers.Intranet
 
         public JsonResult getArticleData(string Id)
         {
-            List<INT_ArticleTxModel> articleData = new List<INT_ArticleTxModel>();
+
+            try {
+                
+                List<INT_ArticleTxModel> articleData = new List<INT_ArticleTxModel>();
             var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
             using (var clientContext = spContext.CreateUserClientContextForSPHost())
             {
@@ -63,6 +66,13 @@ namespace IntranetWeb.Controllers.Intranet
                 }
                 
                 return Json(articleData, JsonRequestBehavior.AllowGet);
+            }
+            }
+            catch (Exception ex)
+            {
+                List<object> obj = new List<object>();
+                obj.Add(ex.Message);
+                return Json(obj, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -97,7 +107,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Article_Title': '" + article.Article_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + article.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(article.Description) + "'";
                 itemdata += " ,'Pinned_Article': '" + article.Pinned_Article + "'";
                 itemdata += " ,'Active': '" + article.Active + "'";
 
@@ -108,6 +118,11 @@ namespace IntranetWeb.Controllers.Intranet
             }
 
             return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public string getDescriptionFormatted(string d)
+        {
+            return d.Replace("'", "&apos;").Replace("“", "&ldquo;").Replace("”", "&rdquo;");
         }
 
         public JsonResult getNoticeData(string Id)
@@ -139,7 +154,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(noticeData.Description) + "'";
                 itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
                 if (noticeData.DocUrl != null && noticeData.DocUrl != "")
                 {
@@ -166,7 +181,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Notice_Title': '" + noticeData.Notice_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + noticeData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(noticeData.Description) + "'";
                 itemdata += " ,'Notice_Type': '" + noticeData.Notice_Type + "'";
                 if (noticeData.DocUrl != null && noticeData.DocUrl != "")
                 {
@@ -213,7 +228,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Event_Name': '" + eventData.Event_Name.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(eventData.Description) + "'";
                 itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
                 if (eventData.End_Date != null && eventData.End_Date != "")
                 {
@@ -241,7 +256,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Event_Name': '" + eventData.Event_Name.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + eventData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(eventData.Description) + "'";
                 itemdata += " ,'Start_Date': '" + eventData.Start_Date + "'";
                 if (eventData.End_Date != null && eventData.End_Date != "")
                 {
@@ -283,7 +298,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(sliderData.Description) + "'";
                 itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject.Replace("'", @"\'") + "'";
                 if (sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
                 {
@@ -309,7 +324,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Slider_Title': '" + sliderData.Slider_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Description': '" + sliderData.Description.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Description': '" + getDescriptionFormatted(sliderData.Description) + "'";
                 itemdata += " ,'Slider_Subject': '" + sliderData.Slider_Subject.Replace("'", @"\'") + "'";
                 if (sliderData.Slider_Image_Url != null && sliderData.Slider_Image_Url != "")
                 {
@@ -358,7 +373,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string itemdata = " 'Award_type': '" + Award.Award_type.Replace("'", @"\'") + "'";
                 itemdata += " ,'Emp_Code': '" + Award.Emp_Code.Replace("'", @"\'") + "'";
                 itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
-                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Reason': '" + getDescriptionFormatted(Award.Reason) + "'";
                 itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
                 itemdata += " ,'Active': '" + Award.Active + "'";
 
@@ -381,7 +396,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string itemdata = " 'Award_type': '" + Award.Award_type.Replace("'", @"\'") + "'";
                 itemdata += " ,'Emp_Code': '" + Award.Emp_Code.Replace("'", @"\'") + "'";
                 itemdata += " ,'Emp_IdId': '" + Convert.ToInt16(Award.Emp_IdId) + "'";
-                itemdata += " ,'Reason': '" + Award.Reason.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Reason': '" + getDescriptionFormatted(Award.Reason) + "'";
                 itemdata += " ,'Pinned_Awards': '" + Award.Pinned_Awards + "'";
                 itemdata += " ,'Active': '" + Award.Active + "'";
 
@@ -551,6 +566,42 @@ namespace IntranetWeb.Controllers.Intranet
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult updateArticleSet(INT_SettingModel awardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Show_Multiple': '" + awardData.Show_Multiple + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(awardData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateNoticeSet(INT_SettingModel awardData)
+        {
+            List<object> obj = new List<object>();
+            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            using (var clientContext = spContext.CreateUserClientContextForSPHost())
+            {
+                string returnID = "0";
+
+                string itemdata = " 'Show_Multiple': '" + awardData.Show_Multiple + "'";
+
+                returnID = BalSetting.UpdateSetting(clientContext, itemdata, Convert.ToString(awardData.ID));
+                if (returnID != "0")
+                    obj.Add("OK");
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getQuicklink(List<INT_QuickLinkModel> recivceData)
         {
             List<INT_QuickLinkModel> QuickLinkData = new List<INT_QuickLinkModel>();
@@ -593,7 +644,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Quick_Link_Title': '" + QuickLinkData.Quick_Link_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", @"\'") + "'";
                 itemdata += " ,'Pinned_Homepage': '" + QuickLinkData.Pinned_Homepage + "'";
                 itemdata += " ,'Is_Internal': '" + QuickLinkData.Is_Internal + "'";
                 itemdata += " ,'Next_Tab': '" + QuickLinkData.Next_Tab + "'";
@@ -616,7 +667,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string returnID = "0";
 
                 string itemdata = " 'Quick_Link_Title': '" + QuickLinkData.Quick_Link_Title.Replace("'", @"\'") + "'";
-                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Quick_Link_Url': '" + QuickLinkData.Quick_Link_Url.Replace("'", @"\'") + "'";
                 itemdata += " ,'Pinned_Homepage': '" + QuickLinkData.Pinned_Homepage + "'";
                 itemdata += " ,'Is_Internal': '" + QuickLinkData.Is_Internal + "'";
                 itemdata += " ,'Next_Tab': '" + QuickLinkData.Next_Tab + "'";
@@ -813,7 +864,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string itemdata = " 'Page_Name': '" + page.Page_Name.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Title': '" + page.Page_Title.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Type': '" + page.Page_Type.Replace("'", @"\'") + "'";
-                itemdata += " ,'Page_Content': '" + page.Page_Content.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Page_Content': '" + getDescriptionFormatted(page.Page_Content) + "'";
                 itemdata += " ,'Widget_Configuration': '" + page.Widget_Configuration + "'";
                 itemdata += " ,'Active': '" + page.Active + "'";
 
@@ -836,7 +887,7 @@ namespace IntranetWeb.Controllers.Intranet
                 string itemdata = " 'Page_Name': '" + page.Page_Name.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Title': '" + page.Page_Title.Replace("'", @"\'") + "'";
                 itemdata += " ,'Page_Type': '" + page.Page_Type.Replace("'", @"\'") + "'";
-                itemdata += " ,'Page_Content': '" + page.Page_Content.Replace("'", "&apos;") + "'";
+                itemdata += " ,'Page_Content': '" + getDescriptionFormatted(page.Page_Content) + "'";
                 itemdata += " ,'Widget_Configuration': '" + page.Widget_Configuration + "'";
                 itemdata += " ,'Active': '" + page.Active + "'";
 

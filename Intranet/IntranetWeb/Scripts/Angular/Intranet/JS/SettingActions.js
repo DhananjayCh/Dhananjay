@@ -17,7 +17,8 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $scope.PagesData = [];
     $scope.awardTypeData = [];
     $scope.HolidayListData = [];
-
+    $scope.CustomWidgetData = "";
+    $scope.IsNoticeDocAdded = false;
     var noticeDoc = {};
 
     $scope.urlfix = decodeURIComponent(getUrlVars()["SPHostUrl"]).split('/sites/')[0];
@@ -70,6 +71,9 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", '').then(function (response) {
                 console.log(new Date());
                 if (response.status == 200) {
+                    if (response.data[0] == "Object reference not set to an instance of an object.") {
+                        window.reload();
+                    } else {
                     resolve(response.data);
                     if (loadFresh) {
                         $scope.ArticleData = response.data;
@@ -80,6 +84,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                             bindDataTable('ArticleDataTable');
                             $("#global-loader").fadeOut("slow");
                         }, 500);
+                        }
                     }
                 }
 
@@ -467,6 +472,11 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
     });
 
+    $(document).on('click', '#saveCustomWidget', function () {
+        $scope.CustomWidgetData = $('.custom-widget-div .note-editable').html();
+        $("#exampleModalCenter").modal('hide');
+    });
+
     $(document).on('click', '#widgetAddClick', function () {
         clearErrorClass();
         var articleValidateArray = [
@@ -499,6 +509,8 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                                 "PiinedData": '',
                                 "Squence": ($scope.widgetCollection.length + 1),
                                 "idArray": idArray,
+                                "CustomWidgetConetnt": "",
+                                "CustomWidgetTitle": "",
                             })
 
                         } else if ($("#Widget_Name").val() == "Event" || $("#Widget_Name").val() == "Awards" || $("#Widget_Name").val() == "Birthday" || $("#Widget_Name").val() == "Anniversary" || $("#Widget_Name").val() == "Holiday List") {
@@ -508,6 +520,18 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                                 "PiinedData": '',
                                 "Squence": ($scope.widgetCollection.length + 1),
                                 "idArray": [],
+                                "CustomWidgetConetnt": "",
+                                "CustomWidgetTitle": "",
+                            })
+                        } else if ($("#Widget_Name").val() == "Custom Widget") {
+                            $scope.widgetCollection.push({
+                                "widgetName": $("#Widget_Name").val(),
+                                "PinnedId": "e" + ($scope.widgetCollection.length + 1),
+                                "PiinedData": '',
+                                "Squence": ($scope.widgetCollection.length + 1),
+                                "idArray": [],
+                                "CustomWidgetConetnt": $scope.CustomWidgetData.replace(/\"/g, "&#34;").replace(/\'/g, "&#39;"),
+                                "CustomWidgetTitle": $("#CustomWidget_Title").val(),
                             })
                         } else {
 
@@ -520,6 +544,8 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                                     "PiinedData": $this.text(),
                                     "Squence": ($scope.widgetCollection.length + 1),
                                     "idArray": [],
+                                    "CustomWidgetConetnt": "",
+                                    "CustomWidgetTitle": "",
                                 })
                             });
                         }
@@ -539,12 +565,14 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     function checkPageWidgetType(WidgetType) {
         var retrurndata = true;
-        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List") {
+        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List" && WidgetType != "Custom Widget") {
             if ($("#Pinned_Content option:selected").length <= 0) {
                 $("#Pinned_Content").parent().append("<label class='error'>Please Select Pinned Content</label>");
                 $("#Pinned_Content").addClass('errorBorderRichText');
                 retrurndata = false;
             }
+        } else if (WidgetType == "Custom Widget") {
+
         }
 
         return retrurndata;
@@ -552,7 +580,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     function checkPageWidgetDuplicate(WidgetType) {
         var retrurndata = true;
-        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List") {
+        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List" && WidgetType != "Custom Widget") {
             $("#Pinned_Content option:selected").each(function (index) {
                 var $this = $(this);
                 var dupPresnt = [];
@@ -560,7 +588,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     return (e.widgetName == WidgetType && e.PinnedId == $this.val())
                 })
                 if (dupPresnt.length > 0) {
-                    triggerNotify("This selection combination already present, Please try to add unique", "left")
+                    triggerNotify("This selection combination already present, Please try to add unique", "left","warning")
                     retrurndata = false;
                 }
             });
@@ -571,7 +599,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 return (e.widgetName == WidgetType)
             })
             if (dupPresnt.length > 0) {
-                triggerNotify("This selection combination already present, Please try to add unique", "left")
+                triggerNotify("This selection combination already present, Please try to add unique", "left","warning")
                 retrurndata = false;
             }
         }
@@ -588,10 +616,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     }
 
     $(document).on('change', '#Widget_Name', function () {
+        $scope.CustomWidgetData = "";
         var d = $(this).val();
         if (d != undefined && d != null) {
             if (d == "Article") {
                 $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").hide();
                 getArticle(false).then(function (response) {
                     var dData = createDropdownData(response, "ID", "Article_Title", "", true, false);
                     $('#Pinned_Content').empty().append(dData);
@@ -600,6 +630,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 })
             } else if (d == "Notice") {
                 $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").hide();
                 getNotice(false).then(function (response) {
                     var dData = createDropdownData(response, "ID", "Notice_Title", "", true, false);
                     $('#Pinned_Content').empty().append(dData);
@@ -608,6 +639,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 })
             } else if (d == "Gallery") {
                 $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").hide();
                 getGallery(false).then(function (response) {
                     var dData = createDropdownData(response, "ID", "Album_Title", "", true, false);
                     $('#Pinned_Content').empty().append(dData);
@@ -616,19 +648,30 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 })
             } else if (d == "Quick Link") {
                 $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").hide();
                 getQuickLink(false).then(function (response) {
                     var dData = createDropdownData(response, "ID", "Quick_Link_Title", "", true, false);
                     $('#Pinned_Content').empty().append(dData);
                     $("#Pinned_Content_Div").show();
                     $('.multiSelectDrop').multiselect('rebuild');
                 })
+            } else if (d == "Custom Widget") {
+                $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").show();
+               
             } else {
                 $("#Pinned_Content_Div").hide();
+                $("#CustomWidget_Data_Div").hide();
             }
         }
     });
 
     // getQuickLink(loadFresh)
+
+    $(document).on("click", "#CustomWidget_Data", function () {
+        inilizeRichTxetEditorInput("summernote2");
+        $("#exampleModalCenter").modal('show');
+    })
 
     function getEmpData() {
         console.log("EmpData");
@@ -678,6 +721,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             $scope.widgetCollection = [];
             getSettingBy().then(function (response) {
                 var dropData = createDropdownData(response, 'Setting_For', 'Setting_For', '', true, true);
+                dropData += '<option value="Custom Widget">Custom Widget</option>'
                 oprnPopupByClick(tab_Clicked, dropData);
             });
         } else if (tab_Clicked == "Menu") {
@@ -803,6 +847,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         } else if ($(this).attr('data-saveType') == "Card_SettingPop") {
             clearErrorClass();
             saveCardSetting('edit');
+        } else if ($(this).attr('data-saveType') == "Article_Setting") {
+            clearErrorClass();
+            saveArticleSetting('edit');
+        } else if ($(this).attr('data-saveType') == "Notice_Setting") {
+            clearErrorClass();
+            saveNoticeSetting('edit');
         } else if ($(this).attr('data-saveType') == "Award_SettingPop") {
             clearErrorClass();
             saveAwardetting('edit');
@@ -877,7 +927,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     return false;
                 }
             } else {
-                if ($("#Menu_URL").val() == "" || $("Menu_URL").val() == null) {
+                if ($("#Menu_URL").val() == "" || $("#Menu_URL").val() == null) {
                     $("#Menu_URL").parent().append("<label class='error'>Enter Url</label>");
                     $("#Menu_URL").addClass('errorBorderRichText');
                     return false;
@@ -1190,7 +1240,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             'Page_Name': $("#Page_Name").val(),
             'Page_Title': $("#Page_Title").val(),
             'Page_Type': $("#Page_Type").val(),
-            'Page_Content': $('.note-editable').html(),
+            'Page_Content': $('.editor-div .note-editable').html(),
             'Widget_Configuration': JSON.stringify($scope.widgetCollection),
             'Active': activeData,
         }
@@ -1232,6 +1282,46 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         data.ID = parseInt($('#saveActionData').attr('data-updateId'));
 
         CommonAppUtilityService.CreateItem("/INT_Setting/updateAwardSet", data).then(function (response) {
+            if (response.data[0] == "OK") {
+                $("#global-loader").fadeOut("slow");
+                $('#SuccessModelProject').modal('show');
+
+            }
+
+        });
+    }
+
+    function saveArticleSetting() {
+
+        $("#exampleModalRight").modal('hide');
+        $("#global-loader").fadeIn("slow");
+        var showMultiple = $('#Show_multiple_Data').hasClass('on');
+        var data = {
+            'Show_Multiple': showMultiple,
+        }
+        data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+
+        CommonAppUtilityService.CreateItem("/INT_Setting/updateArticleSet", data).then(function (response) {
+            if (response.data[0] == "OK") {
+                $("#global-loader").fadeOut("slow");
+                $('#SuccessModelProject').modal('show');
+
+            }
+
+        });
+    }
+
+    function saveNoticeSetting() {
+
+        $("#exampleModalRight").modal('hide');
+        $("#global-loader").fadeIn("slow");
+        var showMultiple = $('#Show_multiple_Data').hasClass('on');
+        var data = {
+            'Show_Multiple': showMultiple,
+        }
+        data.ID = parseInt($('#saveActionData').attr('data-updateId'));
+
+        CommonAppUtilityService.CreateItem("/INT_Setting/updateNoticeSet", data).then(function (response) {
             if (response.data[0] == "OK") {
                 $("#global-loader").fadeOut("slow");
                 $('#SuccessModelProject').modal('show');
@@ -1474,37 +1564,33 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
     }
 
+    
+
     $(document).on('click', '#deleteGalleryImage', function () {
         var Id = $(this).attr("data-Id");
         var currentEl = this;
-        $('#exampleModalRight').modal('hide');
-        swal({
-            title: "File Delete",
-            text: "Are you sure do you really want to delete this File?",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-        }, function () {
-            $(currentEl).closest(".col-md-6").remove();
-            deleteGalleryImageFile(Id);
-        });
+        
+
+        function catchNotifyConfirm(choice) {
+            if (choice) {
+                 $(currentEl).closest(".col-md-6").remove();
+                 deleteGalleryImageFile(Id);
+            }
+        }
+
+        triggerNotifyConfirm("Are you sure do you really want to delete this File?", catchNotifyConfirm);
+                
     })
 
     function deleteGalleryImageFile(Id) {
-        // $("#global-loader").fadeIn("slow");
+         $("#global-loader").fadeIn("slow");
         var data = {
             Id: Id
         }
         CommonAppUtilityService.CreateItem("/INT_Setting/DeleteGalleryImg", data).then(function (response) {
+            $("#global-loader").fadeOut("slow");
             if (response.data[0] == "OK") {
-                swal({
-                    title: "Success!",
-                    text: "Your file deleted successfully!",
-                    type: "success",
-                    timer: 2000,
-                })
-                $('#exampleModalRight').modal('show');
+                triggerNotify("Your file deleted sucessfully!!", "left", "success");
             }
 
         });
@@ -1513,6 +1599,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $(document).on('change', '#customFile', function (e) {
         noticeDoc = e.currentTarget.files[0]
         console.log(noticeDoc);
+        $scope.IsNoticeDocAdded = true;
         $("#attachedFile").empty().append("<li>" + noticeDoc.name + "</li>")
     })
 
@@ -1612,20 +1699,24 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             $("#global-loader").fadeIn("slow");
 
             if ($('#attachDoc').hasClass('on')) {
-                var fileType = (noticeDoc.type).split("/")[1];
+                if ($scope.IsNoticeDocAdded) {
+                    var fileType = (noticeDoc.type).split("/")[1];
 
-                if ((fileType).toLowerCase() == "jpeg" || (fileType).toLowerCase() == "jpg" || (fileType).toLowerCase() == "png" || (fileType).toLowerCase() == "gif") {
-                    saveFile(noticeDoc, '/INT_Setting/SaveImages').then(function (data) {
-                        console.log('ImageSave');
-                        console.log(data);
-                        callNoticeSave(data, fileType, processType);
-                    })
+                    if ((fileType).toLowerCase() == "jpeg" || (fileType).toLowerCase() == "jpg" || (fileType).toLowerCase() == "png" || (fileType).toLowerCase() == "gif") {
+                        saveFile(noticeDoc, '/INT_Setting/SaveImages').then(function (data) {
+                            console.log('ImageSave');
+                            console.log(data);
+                            callNoticeSave(data, fileType, processType);
+                        })
+                    } else {
+                        saveFile(noticeDoc, '/INT_Setting/SaveDocument').then(function (data) {
+                            console.log('ImageSave');
+                            console.log(data);
+                            callNoticeSave(data, fileType, processType);
+                        })
+                    }
                 } else {
-                    saveFile(noticeDoc, '/INT_Setting/SaveDocument').then(function (data) {
-                        console.log('ImageSave');
-                        console.log(data);
-                        callNoticeSave(data, fileType, processType);
-                    })
+                    callNoticeSave(null, null, processType);
                 }
 
             } else {
@@ -1643,10 +1734,12 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         var data = {
             'Notice_Title': $('#Notice_Title').val(),
             'Description': $('.note-editable').html(),
-            'Notice_Type': docType,
-            'DocUrl': docUrl,
             'Pinned_Notice': pinnedData,
             'Active': activeData,
+        }
+        if (docUrl != null) {
+            data.Notice_Type = docType;
+            data.DocUrl = docUrl;
         }
 
         if (type == "edit") {
@@ -1918,6 +2011,10 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                         a.htmlData = htmlString;
                         $("#global-loader").fadeOut("slow");
                         inilizeEditpopUp(a, openFor);
+                    } else {
+                        a.htmlData = "";
+                        $("#global-loader").fadeOut("slow");
+                        inilizeEditpopUp(a, openFor);
                     }
                     //$scope.GalleryData = response.data;
                 }
@@ -1954,6 +2051,18 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
         } else if (openFor == "Event_SettingPop") {
             getSettingBy('Event').then(function (response) {
+                var a = response[0];
+                inilizeEditpopUp(a, openFor);
+            });
+
+        } else if (openFor == "Article_Setting") {
+            getSettingBy('Article').then(function (response) {
+                var a = response[0];
+                inilizeEditpopUp(a, openFor);
+            });
+
+        } else if (openFor == "Notice_Setting") {
+            getSettingBy('Notice').then(function (response) {
                 var a = response[0];
                 inilizeEditpopUp(a, openFor);
             });
@@ -2010,6 +2119,29 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
         return returnHtml;
     }
+
+    $(document).on("click", "#resetCardsColours", function () {
+        var clickFor = $(this).attr("data-reset");
+        if (clickFor == "Birthday") {
+            $("#colorpicker1").spectrum("set", "#ffa800");
+            $("#cardStructure").attr('style', 'background-image:unset!important;background-color:#ffa800!important');
+
+            $("#colorpicker2").spectrum("set", "#fff");
+            $("#cardStructureFont").attr('style', 'color:#fff!important');
+        } else if (clickFor == "Anniversary") {
+            $("#colorpicker1").spectrum("set", "#089287");
+            $("#cardStructure").attr('style', 'background-image:unset!important;background-color:#089287!important');
+
+            $("#colorpicker2").spectrum("set", "#fff");
+            $("#cardStructureFont").attr('style', 'color:#fff!important');
+        } else if (clickFor == "Award") {
+            $("#colorpicker1").spectrum("set", "#884af1");
+            $("#cardStructure").attr('style', 'background-image:unset!important;background-color:#884af1!important');
+
+            $("#colorpicker2").spectrum("set", "#fff");
+            $("#cardStructureFont").attr('style', 'color:#fff!important');
+        }
+    })
 
 
     function getParameterByName(name) {

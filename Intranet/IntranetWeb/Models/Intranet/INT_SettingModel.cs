@@ -17,6 +17,7 @@ namespace IntranetWeb.Models.Intranet
         public string Font_Color { get; set; }
         public bool Show_Card_Title { get; set; }
         public bool Fixed { get; set; }
+        public bool Show_Multiple { get; set; }
         public bool Active { get; set; }
     }
 }

@@ -51,6 +51,11 @@
     <!-- include summernote css/js -->
     <link href="~/Scripts/Angular/Intranet/JS/IntranetJs/summernote/css/summernote-bs4.min.css" rel="stylesheet">
 }
+<style>
+    .card .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)!important;
+}
+</style>
 
 <div class="container" ng-app="settingApp" ng-controller="settingController">
     <div class="breadcrumb-header justify-content-between mg-t-0">
@@ -107,7 +112,7 @@
                                                         <tr ng-repeat="a in ArticleData">
                                                             <td>{{a.ID}}</td>
                                                             <td>{{a.Article_Title}}</td>
-                                                            <td>{{getTextFromHtml(a.Description)}}</td>
+                                                            <td class="dataTableDecriptionElipses">{{getTextFromHtml(a.Description)}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{a.Pinned_Article}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{a.Pinned_Article}}>No</span>
@@ -155,7 +160,7 @@
                                                         <tr ng-repeat="n in NoticeData">
                                                             <td>{{n.ID}}</td>
                                                             <td>{{n.Notice_Title}}</td>
-                                                            <td>{{getTextFromHtml(n.Description)}}</td>
+                                                            <td class="dataTableDecriptionElipses">{{getTextFromHtml(n.Description)}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{n.Pinned_Notice}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{n.Pinned_Notice}}>No</span>
@@ -205,7 +210,7 @@
                                                             <td>{{e.Event_Name}}</td>
                                                             <td>{{formatDate(e.Start_Date,'MM/DD/YYYY h:mm:ss a','DD MMM YYYY')}}</td>
                                                             <td>{{formatDate(e.End_Date,'MM/DD/YYYY h:mm:ss a','DD MMM YYYY')}}</td>
-                                                            <td>{{getTextFromHtml(e.Description)}}</td>
+                                                            <td class="dataTableDecriptionElipses">{{getTextFromHtml(e.Description)}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{e.Pinned_Event}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{e.Pinned_Event}}>No</span>
@@ -253,7 +258,7 @@
                                                             <td>{{s.Slider_Title}}</td>
                                                             <td>{{s.Slider_Subject}}</td>
                                                             <td><img src={{urlfix+s.Slider_Image_Url}} /></td>
-                                                            <td>{{getTextFromHtml(s.Description)}}</td>
+                                                            <td class="dataTableDecriptionElipses">{{getTextFromHtml(s.Description)}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{s.Active}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{s.Active}}>No</span>
@@ -469,7 +474,7 @@
                                                             <td>{{Me.ID}}</td>
                                                             <td>{{Me.MenuName}}</td>
                                                             <td>{{Me.OrderNo}}</td>
-                                                            <td>{{Me.URL}}</td>
+                                                            <td style="word-break: break-word;">{{Me.URL}}</td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{Me.External_Url}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{Me.External_Url}}>No</span>
@@ -613,6 +618,20 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-4">
+                                            <div class="card">
+                                                <div class="card-body mg-x-auto pointerCursor" ng-click="editPopUp('','Article_Setting')">
+                                                    <h5 class="mg-b-0">Article Setting <i class="fas fa-cogs" style="color:#0162e8"></i></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="card">
+                                                <div class="card-body mg-x-auto pointerCursor" ng-click="editPopUp('','Notice_Setting')">
+                                                    <h5 class="mg-b-0">Notice Setting <i class="fas fa-cogs" style="color:#0162e8"></i></h5>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -656,6 +675,33 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveActionData" data-saveType="" data-operation="" data-updateId="">Save</button>
+                    <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div id="global-loaderPopup">
+                <label class="loader-Label" id="centerPopupLoaderLabel"></label>
+                <img src="../assets/img/loader.svg" class="loader-img" alt="Loader">
+            </div>
+
+            <div class="modal-content">
+                <div class="modal-body" style="overflow-y: scroll; max-height:90%;">
+
+                    <div class="row row-sm">
+                        <div class="col-lg-12">
+                            <div class="form-group"><label for="CustomWidget_Title">Widget Title</label><input type="text" class="form-control" id="CustomWidget_Title" placeholder="Enter Widget Title"></div>
+                        </div>
+                        <div class="col-lg-12"><div class="form-group custom-widget-div"><label for="Custom_Description">Create Your Custom Widget</label><div id="summernote2"></div></div></div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveCustomWidget" data-saveType="" data-operation="" data-updateId="">Save</button>
                     <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                 </div>
@@ -792,8 +838,8 @@
                                 <!--Nav-->
                                 <nav class="horizontalMenu clearfix">
                                     <ul class="horizontalMenu-list">
-                                        <li aria-haspopup="true"><a href="index.html" class=""><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" /><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" /></svg>Menu 1</a></li>
-                                        <li aria-haspopup="true"><a href="index.html" class=""><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" /><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" /></svg>Menu 2</a></li>
+                                        <li aria-haspopup="true"><a href="index.html" class="">Menu 1</a></li>
+                                        <li aria-haspopup="true"><a href="index.html" class="">Menu 2</a></li>
                                     </ul>
                                 </nav>
                                 <!--Nav-->
@@ -818,36 +864,41 @@
                                 </ol>
                             </nav>
                             <!-- breadcrumb -->
-                            <!-- row -->
-                            <div class="row SectionT">
-                                <div class="col-xl-12 col-lg-12">
-                                    <h3 class="text-primary" id="TitlePageDivCol"></h3>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <!-- row -->
+                                    <div class="row SectionT">
+                                        <div class="col-xl-12 col-lg-12">
+                                            <h3 class="text-primary" id="TitlePageDivCol"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="row fullPageDiv" style="display:none">
+                                        <div class="col-xl-12 col-lg-12 SectionT" id="fullPageDivCol">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row rightPageDiv" style="display:none">
+
+                                        <div class="col-xl-8 col-lg-8" id="rightPageDivCol">
+
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 pd-t-10">
+                                            <div class="rightp row"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row leftPageDiv" style="display:none">
+                                        <div class="col-xl-4 col-lg-4 pd-t-10">
+                                            <div class="leftp row"></div>
+                                        </div>
+                                        <div class="col-xl-8 col-lg-8" id="lefttPageDivCol">
+
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row fullPageDiv" style="display:none">
-                                <div class="col-xl-12 col-lg-12 SectionT" id="fullPageDivCol">
-
-                                </div>
-                            </div>
-
-                            <div class="row rightPageDiv" style="display:none">
-
-                                <div class="col-xl-8 col-lg-8" id="rightPageDivCol">
-
-                                </div>
-                                <div class="col-xl-4 col-lg-4 pd-t-10">
-                                    <div class="rightp row"></div>
-                                </div>
-                            </div>
-
-                            <div class="row leftPageDiv" style="display:none">
-                                <div class="col-xl-4 col-lg-4 pd-t-10">
-                                    <div class="leftp row"></div>
-                                </div>
-                                <div class="col-xl-8 col-lg-8" id="lefttPageDivCol">
-
-                                </div>
-
                             </div>
 
                         </div>

@@ -433,9 +433,24 @@ ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner:after, .ribbon.ribb
     .newJoineeCardHeight .newJoineeMarginTop {
         margin-top: 16px !important;
     }
+.dataTableDecriptionElipses {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 8px;
+    max-height: 70px;
+}
+.notifit_confirm {
+    top: 20px;
+    right: auto !important;
+    left: 20px !important;
+    z-index: 99999;
+}
 /**********Fixed Hight End*************/
-/*Read More */
-.morelink {
+    /*Read More */
+    .morelink {
     margin-top: 10% !important;
     color: #159bd7 !important;
     cursor: pointer;

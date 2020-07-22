@@ -18,7 +18,7 @@ namespace IntranetWeb.BAL.Intranet
             JArray jArray = new JArray();
             RESTOption rESTOption = new RESTOption();
             rESTOption.filter = filter;
-            rESTOption.select = "ID,Setting_For,Before_Event,After_Event,Squence,Active,Fixed,Show_Card_Title,Background_Color,Font_Color,Card_Title";
+            rESTOption.select = "ID,Setting_For,Before_Event,After_Event,Squence,Active,Fixed,Show_Card_Title,Background_Color,Font_Color,Card_Title,Show_Multiple";
             rESTOption.orderby = "Squence";
             rESTOption.top = "5000";
 
@@ -53,6 +53,7 @@ namespace IntranetWeb.BAL.Intranet
                     Font_Color = j["Font_Color"] == null ? "" : j["Font_Color"].ToString(),
                     Show_Card_Title = (bool)j["Show_Card_Title"],
                     Fixed = (bool)j["Fixed"],
+                    Show_Multiple = (bool)j["Show_Multiple"],
                     Active = (bool)j["Active"],
                 }); ;
             }

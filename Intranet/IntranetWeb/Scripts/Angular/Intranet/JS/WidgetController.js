@@ -33,6 +33,20 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 		return CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", data);
 	}
 
+	this.getCustomWidgetHtml = function (d) {
+
+		var elementD = "<div class='card card-primary'>" +
+			"<div class='d-flex justify-content-between card-header'>" +
+			"<h4 class='card-title'>" + d.CustomWidgetTitle + "</h4>" +
+			"</div>" +
+			"<div class='card-body pt-0 ht-100p pointerCursor'>" +
+			"<span class='cradDescription'>" + d.CustomWidgetConetnt + "</span>" +
+			"</div>" +
+			"</div>";
+
+		return elementD;
+	}
+
 	this.getNotice = function (Id) {
 
 		return this.callNotice(Id);
@@ -498,8 +512,20 @@ wapp.controller('rightpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtility
 				AnniversaryFun($scope.widgetDataArray[0])
 			} else if ($scope.widgetDataArray[0].widgetName == "Holiday List") {
 				HolidayListFun($scope.widgetDataArray[0])
+			} else if ($scope.widgetDataArray[0].widgetName == "Custom Widget") {
+				CustomWidgetFun($scope.widgetDataArray[0])
 			}
 		}
+	}
+
+	function CustomWidgetFun(d) {
+
+		var ListNames = widgetService.getCustomWidgetHtml(d);
+		var myEl = angular.element(document.querySelector('#rightpWidget'));
+		myEl.append(ListNames);
+		$scope.widgetDataArray.splice(0, 1);
+		createWidget();
+
 	}
 
 	function HolidayListFun(d) {
@@ -695,8 +721,20 @@ wapp.controller('leftpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtilityS
 				AnniversaryFun($scope.widgetDataArray[0])
 			} else if ($scope.widgetDataArray[0].widgetName == "Holiday List") {
 				HolidayListFun($scope.widgetDataArray[0])
+			} else if ($scope.widgetDataArray[0].widgetName == "Custom Widget") {
+				CustomWidgetFun($scope.widgetDataArray[0])
 			}
 		}
+	}
+
+	function CustomWidgetFun(d) {
+
+		var ListNames = widgetService.getCustomWidgetHtml(d);
+		var myEl = angular.element(document.querySelector('#leftWidget'));
+		myEl.append(ListNames);
+		$scope.widgetDataArray.splice(0, 1);
+		createWidget();
+
 	}
 
 	function articleFun(d) {

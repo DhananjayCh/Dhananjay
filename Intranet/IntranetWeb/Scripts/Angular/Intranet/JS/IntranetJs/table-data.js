@@ -2,7 +2,7 @@
 function bindDataTable(id) {
 	var table = $('#' + id).DataTable({
 		lengthChange: true,
-		responsive: true,
+		//responsive: true,
 		aaSorting: [[0, 'desc']],
 		aoColumnDefs: [{ "bVisible": false, "aTargets": [0] }],
 		bDestroy: true,
