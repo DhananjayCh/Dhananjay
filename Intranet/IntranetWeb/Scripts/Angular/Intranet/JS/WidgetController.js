@@ -7,6 +7,7 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 		return this.callArticle(Id);
 	}
 
+
 	this.getArticleHtml = function (d) {
 
 		var elementD = "<div class='card card-primary'>" +
@@ -14,10 +15,12 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 			"<h4 class='card-title'>ARTICLE</h4>" +
 			"<i class='far fa-2x fa-newspaper green'></i>" +
 			"</div>" +
-			"<div class='card-body text-center pt-0 fixedCardHeight pointerCursor'>" +
-			"<h5 class='card-title1'>" + d.Article_Title +"</h5>" +
-			"<span class='cradDescription'>"+d.desc+"</span>" +
-			"</div>" +
+			"<div id='myCarousel3' class='carousel slide' data-ride='carousel'>";
+		if (d.length > 1) {
+			elementD += "<ol class='Article carousel-indicators' > " + this.createindicator(d, 'myCarousel3') + "</ol >";
+		}
+
+		elementD += "<div class='carousel-inner'>" + this.createArticleLoop(d) + "</div>" +
 			"<div class='d-flex flex-row justify-content-end card-footer'>" +
 			"<a class='anchorVisted' href='#'>View All</a>" +
 			"</div>" +
@@ -26,10 +29,22 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 		return elementD;
 	}
 
-	this.callArticle = function (Id) {
-		var data = {
-			Id: Id
+	this.createArticleLoop = function (data) {
+		var returnData = "";
+		for (var i = 0; i < data.length; i++) {
+
+			returnData += "<div class='ArticleDiv card-body text-center pt-0 fixedCardHeight pointerCursor navigateClick " + this.BindBirthdayClass(i) + "' data-type='Article' data-Id='" + data[0].Id + "'>" +
+				"<h5 class='card-title1 cardNoticeTitle'>" + data[i].Article_Title + "</h5>" +
+				"<span class='cradDescription'>" + $(data[i].Description).text() + "</span>" +
+				"</div>";
 		}
+		return returnData;
+	}
+
+	this.callArticle = function (data) {
+		/*var data = {
+			Id: Id
+		}*/
 		return CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", data);
 	}
 
@@ -52,6 +67,7 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 		return this.callNotice(Id);
 	}
 
+
 	this.getNoticeHtml = function (d) {
 
 		var elementD = "<div class='card card-primary'>" +
@@ -59,23 +75,13 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 			"<h4 class='card-title'>NOTICE</h4>" +
 			"<i class='far fa-2x fa-newspaper orange'></i>" +
 			"</div>" +
-			"<div class='card-body text-center pt-0 fixedCardHeight pointerCursor'>" +
-			"<h5 class='card-title1 cardNoticeTitle pd-t-5 pd-b-5'>" + d.Notice_Title + "</h5>" +
-			"<span class='cardNoticeDescription'>" + d.desc + "</span>";
-		if (d.noticeAttachmentYes) {
-			elementD += "<div class='btn-icon-list notice-Attachement justify-content-between'>" +
-				"<h6 class='text-success'>This notice contains attachment </h6>" +
-				"<div class='mg-l-10'>" +
-				"<a class='btn btn-success btn-icon btn-min-width' target='_blank' href='" + d.NoticeDocUrl+"'><i class='fas fa-download'></i></a>" +
-				"</div>" +
-				"</div>"
-		} else {
-			elementD += "<div class='btn-icon-list notice-Attachement justify-content-between'>" +
-				"<h6 class='text-danger'>This notice doesn't contains any attachment </h6>" +
-				"</div>";
+			"<div id='myCarousel13' class='carousel slide' data-ride='carousel'>";
+		if (d.length > 1) {
+			elementD += "<ol class='Notice carousel-indicators' > " + this.createindicator(d, 'myCarousel13') + "</ol >";
 		}
-		
-		elementD +=	"</div >" +
+
+		elementD += "<div class='carousel-inner'>" + this.createNoticeLoop(d) + "</div>" +
+
 			"<div class='d-flex flex-row justify-content-end card-footer'>" +
 			"<a class='anchorVisted' href='#'>View All</a>" +
 			"</div>" +
@@ -84,11 +90,46 @@ wapp.service('widgetService', function (CommonAppUtilityService) {
 		return elementD;
 	}
 
+	this.createNoticeLoop = function (data) {
+		var returnData = "";
+		for (var i = 0; i < data.length; i++) {
+			var url = "#";
+			var AttachmentYes = false;
+			if (data[i].Notice_Type != "Text" && (data[i].DocUrl != "" && data[i].DocUrl != undefined)) {
+				url = data[i].DocUrl;
+				AttachmentYes = true;
+			} else {
+				AttachmentYes = false;
+			}
 
-	this.callNotice = function (Id) {
-		var data = {
-			Id: Id
+			returnData += "<div class='NoticeDiv card-body text-center fixedCardHeight pt-0 pointerCursor navigateClick " + this.BindBirthdayClass(i) + "' data-type='Notice' data-Id='" + data[i].Id + "'>" +
+				"<h5 class='card-title1 cardNoticeTitle pd-t-5 pd-b-5'>" + data[i].Notice_Title + "</h5>" +
+				"<span class='cardNoticeDescription'>" + $(data[i].Description).text() + "</span>";
+			if (AttachmentYes) {
+				returnData += "<div class='btn-icon-list notice-Attachement justify-content-between'>" +
+					"<h6 class='text-success'>This notice contains attachment </h6>" +
+					"<div class='mg-l-10'>" +
+					"<a class='btn btn-success btn-icon btn-min-width' target='_blank' href='" + url + "'><i class='fas fa-download'></i></a>" +
+					"</div>" +
+					"</div>"
+			} else {
+				returnData += "<div class='btn-icon-list notice-Attachement justify-content-between'>" +
+					"<h6 class='text-danger'>This notice doesn't contains any attachment </h6>" +
+					"</div>";
+			}
+
+			returnData += "</div >";
+
 		}
+		return returnData;
+	}
+
+
+
+	this.callNotice = function (data) {
+		/*var data = {
+			Id: Id
+		}*/
 		return CommonAppUtilityService.CreateItem("/INT_Setting/getNoticeData", data);
 	}
 
@@ -584,17 +625,15 @@ wapp.controller('rightpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtility
 	}
 
 	function articleFun(d) {
-		widgetService.getArticle(d.PinnedId).then(function (response) {
+		widgetService.getArticle(d.idArray).then(function (response) {
 			console.log("response");
 			console.log(response);
 			if (response.status == 200) {
-				var demoData = response.data[0];
-				console.log($scope.demoData);
-
-				demoData.desc = $(demoData.Description).text();
+				var demoData = response.data;
 				var ListNames = widgetService.getArticleHtml(demoData);
 				var myEl = angular.element(document.querySelector('#rightpWidget'));
 				myEl.append(ListNames);
+				$('.carousel').carousel();
 				$scope.widgetDataArray.splice(0, 1);
 				createWidget();
 			}
@@ -602,23 +641,16 @@ wapp.controller('rightpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtility
 	}
 
 	function noticeFun(d) {
-		widgetService.getNotice(d.PinnedId).then(function (response) {
+		widgetService.getNotice(d.idArray).then(function (response) {
 			console.log("response");
 			console.log(response);
 			if (response.status == 200) {
-				var demoData = response.data[0];
-				demoData.desc = $(demoData.Description).text();
-
-				if (demoData.Notice_Type != "Text" && (demoData.DocUrl != "" && demoData.DocUrl != undefined)) {
-					demoData.NoticeDocUrl = demoData.DocUrl;
-					demoData.noticeAttachmentYes = true;
-				} else {
-					demoData.noticeAttachmentYes = false;
-				}
+				var demoData = response.data;
 
 				var ListNames = widgetService.getNoticeHtml(demoData);
 				var myEl = angular.element(document.querySelector('#rightpWidget'));
 				myEl.append(ListNames);
+				$('.carousel').carousel();
 				$scope.widgetDataArray.splice(0, 1);
 				createWidget();
 			}
@@ -738,17 +770,16 @@ wapp.controller('leftpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtilityS
 	}
 
 	function articleFun(d) {
-		widgetService.getArticle(d.PinnedId).then(function (response) {
+		widgetService.getArticle(d.idArray).then(function (response) {
 			console.log("response");
 			console.log(response);
 			if (response.status == 200) {
-				var demoData = response.data[0];
-				console.log($scope.demoData);
+				var demoData = response.data;
 
-				demoData.desc = $(demoData.Description).text();
 				var ListNames = widgetService.getArticleHtml(demoData);
 				var myEl = angular.element(document.querySelector('#leftWidget'));
 				myEl.append(ListNames);
+				$('.carousel').carousel();
 				$scope.widgetDataArray.splice(0, 1);
 				createWidget();
 			}
@@ -756,23 +787,16 @@ wapp.controller('leftpCntrl', ['$scope', '$http', '$compile', 'CommonAppUtilityS
 	}
 
 	function noticeFun(d) {
-		widgetService.getNotice(d.PinnedId).then(function (response) {
+		widgetService.getNotice(d.idArray).then(function (response) {
 			console.log("response");
 			console.log(response);
 			if (response.status == 200) {
-				var demoData = response.data[0];
-				demoData.desc = $(demoData.Description).text();
-
-				if (demoData.Notice_Type != "Text" && (demoData.DocUrl != "" && demoData.DocUrl != undefined)) {
-					demoData.NoticeDocUrl = demoData.DocUrl;
-					demoData.noticeAttachmentYes = true;
-				} else {
-					demoData.noticeAttachmentYes = false;
-				}
-
+				var demoData = response.data;
+				
 				var ListNames = widgetService.getNoticeHtml(demoData);
 				var myEl = angular.element(document.querySelector('#leftWidget'));
 				myEl.append(ListNames);
+				$('.carousel').carousel();
 				$scope.widgetDataArray.splice(0, 1);
 				createWidget();
 			}

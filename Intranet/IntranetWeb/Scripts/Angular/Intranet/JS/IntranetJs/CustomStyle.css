@@ -32,6 +32,35 @@ body {
     height: 170px !important;
 }
 
+.Article.carousel-indicators {
+    bottom: 10px !important;
+}
+
+    .Article.carousel-indicators li {
+        width: 10px;
+        height: 10px;
+        background-color: cadetblue !important;
+    }
+
+.ArticleDiv.card-body + .card-body {
+    border-top: none !important;
+}
+
+.Notice.carousel-indicators {
+    bottom: 10px !important;
+}
+
+    .Notice.carousel-indicators li {
+        width: 10px;
+        height: 10px;
+        background-color: darkorange !important;
+    }
+
+.NoticeDiv.card-body + .card-body {
+    border-top: none !important;
+}   
+
+
 .avatar-Profile-User {
     width: 84px !important;
     height: 84px !important;

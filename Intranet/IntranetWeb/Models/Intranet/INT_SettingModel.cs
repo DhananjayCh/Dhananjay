@@ -15,6 +15,8 @@ namespace IntranetWeb.Models.Intranet
         public string Card_Title { get; set; }
         public string Background_Color { get; set; }
         public string Font_Color { get; set; }
+        public string favicon_Icon { get; set; }
+        public string Logo { get; set; }
         public bool Show_Card_Title { get; set; }
         public bool Fixed { get; set; }
         public bool Show_Multiple { get; set; }

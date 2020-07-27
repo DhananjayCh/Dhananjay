@@ -46,16 +46,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             CommonAppUtilityService.CreateItem("/INT_Setting/getQuicklink", '').then(function (response) {
                 console.log(new Date());
                 if (response.status == 200) {
-                    resolve(response.data);
-                    if (loadFresh) {
-                        $scope.QuickLinkData = response.data;
-                        $('#QuickLinkDataTable').DataTable().clear();
-                        $('#QuickLinkDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('QuickLinkDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
+                        resolve(response.data);
+                        if (loadFresh) {
+                            $scope.QuickLinkData = response.data;
+                            $('#QuickLinkDataTable').DataTable().clear();
+                            $('#QuickLinkDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('QuickLinkDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
                 }
 
@@ -65,25 +70,31 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     }
 
+
+    $(document).on("click", "#CloseAndReload", function () {
+        location.reload();
+    })
+
     function getArticle(loadFresh) {
         console.log(new Date());
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getArticleData", '').then(function (response) {
                 console.log(new Date());
                 if (response.status == 200) {
-                    if (response.data[0] == "Object reference not set to an instance of an object.") {
-                        window.reload();
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
                     } else {
-                    resolve(response.data);
-                    if (loadFresh) {
-                        $scope.ArticleData = response.data;
-                        $('#ArticleDataTable').DataTable().clear();
-                        $('#ArticleDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('ArticleDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        resolve(response.data);
+                        if (loadFresh) {
+                            $scope.ArticleData = response.data;
+                            $('#ArticleDataTable').DataTable().clear();
+                            $('#ArticleDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('ArticleDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
                         }
                     }
                 }
@@ -100,15 +111,20 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getNoticeData", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.NoticeData = response.data;
-                        $('#NoticeDataTable').DataTable().clear();
-                        $('#NoticeDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            bindDataTable('NoticeDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.NoticeData = response.data;
+                            $('#NoticeDataTable').DataTable().clear();
+                            $('#NoticeDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                bindDataTable('NoticeDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
 
                 }
@@ -126,17 +142,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getEventData", '').then(function (response) {
                 if (response.status == 200) {
-
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.EventData = response.data;
-                        $('#EventDataTable').DataTable().clear();
-                        $('#EventDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('EventDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.EventData = response.data;
+                            $('#EventDataTable').DataTable().clear();
+                            $('#EventDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('EventDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
 
                 }
@@ -154,17 +174,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getSiderData", '').then(function (response) {
                 if (response.status == 200) {
-
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.SliderData = response.data;
-                        $('#SliderDataTable').DataTable().clear();
-                        $('#SliderDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('SliderDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.SliderData = response.data;
+                            $('#SliderDataTable').DataTable().clear();
+                            $('#SliderDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('SliderDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
 
                 }
@@ -182,16 +206,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getGalleryData", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.GalleryData = response.data;
-                        $('#GalleryDataTable').DataTable().clear();
-                        $('#GalleryDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('GalleryDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.GalleryData = response.data;
+                            $('#GalleryDataTable').DataTable().clear();
+                            $('#GalleryDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('GalleryDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
 
                 }
@@ -209,23 +238,33 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getEmployee", '').then(function (response) {
                 if (response.status == 200) {
-                    $scope.allEmpData = response.data
-                    getAwardType(false);
-                    CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsData", '').then(function (response) {
-                        if (response.status == 200) {
-                            $scope.AwardData = response.data;
-                            resolve(response.data);
-                            $('#AwardDataTable').DataTable().clear();
-                            $('#AwardDataTable').DataTable().destroy();
-                            console.log($scope.AwardData);
-                            setTimeout(function () {
-                                bindDataTable('AwardDataTable');
-                                $("#global-loader").fadeOut("slow");
-                            }, 500);
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
+                        $scope.allEmpData = response.data
+                        getAwardType(false);
+                        CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsData", '').then(function (response) {
+                            if (response.status == 200) {
+                                if (response.data == "error") {
+                                    $("#global-loader").fadeOut("slow");
+                                    $('#ErrorModelBox').modal('show');
+                                } else {
+                                    $scope.AwardData = response.data;
+                                    resolve(response.data);
+                                    $('#AwardDataTable').DataTable().clear();
+                                    $('#AwardDataTable').DataTable().destroy();
+                                    console.log($scope.AwardData);
+                                    setTimeout(function () {
+                                        bindDataTable('AwardDataTable');
+                                        $("#global-loader").fadeOut("slow");
+                                    }, 500);
+                                }
 
-                        }
-                        console.log(response);
-                    });
+                            }
+                            console.log(response);
+                        });
+                    }
 
                 }
             });
@@ -241,17 +280,22 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getAwardsTypeData", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     $scope.awardType = response.data;
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.awardTypeData = response.data;
-                        $('#awardTypeDataTable').DataTable().clear();
-                        $('#awardTypeDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('awardTypeDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.awardTypeData = response.data;
+                            $('#awardTypeDataTable').DataTable().clear();
+                            $('#awardTypeDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('awardTypeDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
 
 
@@ -272,16 +316,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             CommonAppUtilityService.CreateItem("/INT_Setting/getPagesData", passD).then(function (response) {
                 console.log(new Date());
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.PagesData = response.data;
-                        $('#PageDataTable').DataTable().clear();
-                        $('#PageDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('PageDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.PagesData = response.data;
+                            $('#PageDataTable').DataTable().clear();
+                            $('#PageDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('PageDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
                 }
 
@@ -294,17 +343,22 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getNavigationMenuData", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.MenuData = response.data;
-                        console.log($scope.MenuData)
-                        $('#MenuDataTable').DataTable().clear();
-                        $('#MenuDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('MenuDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.MenuData = response.data;
+                            console.log($scope.MenuData)
+                            $('#MenuDataTable').DataTable().clear();
+                            $('#MenuDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('MenuDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
                 }
 
@@ -317,17 +371,22 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getQuicklink", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.QuickLinkData = response.data;
-                        console.log($scope.QuickLinkData)
-                        $('#QuickLinkDataTable').DataTable().clear();
-                        $('#QuickLinkDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('QuickLinkDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.QuickLinkData = response.data;
+                            console.log($scope.QuickLinkData)
+                            $('#QuickLinkDataTable').DataTable().clear();
+                            $('#QuickLinkDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('QuickLinkDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
                 }
 
@@ -340,17 +399,22 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getHolidayListData", '').then(function (response) {
                 if (response.status == 200) {
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
                     resolve(response.data);
-                    if (loadFresh) {
-                        $scope.HolidayListData = response.data;
-                        console.log($scope.HolidayListData)
-                        $('#HolidayListDataTable').DataTable().clear();
-                        $('#HolidayListDataTable').DataTable().destroy();
-                        setTimeout(function () {
-                            $scope.$apply();
-                            bindDataTable('HolidayListDataTable');
-                            $("#global-loader").fadeOut("slow");
-                        }, 500);
+                        if (loadFresh) {
+                            $scope.HolidayListData = response.data;
+                            console.log($scope.HolidayListData)
+                            $('#HolidayListDataTable').DataTable().clear();
+                            $('#HolidayListDataTable').DataTable().destroy();
+                            setTimeout(function () {
+                                $scope.$apply();
+                                bindDataTable('HolidayListDataTable');
+                                $("#global-loader").fadeOut("slow");
+                            }, 500);
+                        }
                     }
                 }
 
@@ -374,9 +438,14 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         return new Promise(function (resolve, reject) {
             CommonAppUtilityService.CreateItem("/INT_Setting/getSetting", data).then(function (response) {
                 if (response.status == 200) {
-                    $scope.SettingData = response.data;
-                    resolve(response.data);
-                    console.log(response.data);
+                    if (response.data == "error") {
+                        $("#global-loader").fadeOut("slow");
+                        $('#ErrorModelBox').modal('show');
+                    } else {
+                        $scope.SettingData = response.data;
+                        resolve(response.data);
+                        console.log(response.data);
+                    }
                 }
             });
 
@@ -494,7 +563,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             else {
                 if (checkPageWidgetType($("#Widget_Name").val())) {
                     if (checkPageWidgetDuplicate($("#Widget_Name").val())) {
-                        if ($("#Widget_Name").val() == "Quick Link") {
+                        if ($("#Widget_Name").val() == "Quick Link" || $("#Widget_Name").val() == "Article" || $("#Widget_Name").val() == "Notice") {
                             var idArray = [];
                             $("#Pinned_Content option:selected").each(function (index) {
                                 var $this = $(this);
@@ -580,7 +649,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
 
     function checkPageWidgetDuplicate(WidgetType) {
         var retrurndata = true;
-        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List" && WidgetType != "Custom Widget") {
+        if (WidgetType != "Event" && WidgetType != "Awards" && WidgetType != "Birthday" && WidgetType != "Anniversary" && WidgetType != "Holiday List" && WidgetType != "Custom Widget" && WidgetType != "Article" && WidgetType != "Notice") {
             $("#Pinned_Content option:selected").each(function (index) {
                 var $this = $(this);
                 var dupPresnt = [];
@@ -588,7 +657,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     return (e.widgetName == WidgetType && e.PinnedId == $this.val())
                 })
                 if (dupPresnt.length > 0) {
-                    triggerNotify("This selection combination already present, Please try to add unique", "left","warning")
+                    triggerNotify("This selection combination already present, Please try to add unique", "left", "warning")
                     retrurndata = false;
                 }
             });
@@ -599,7 +668,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 return (e.widgetName == WidgetType)
             })
             if (dupPresnt.length > 0) {
-                triggerNotify("This selection combination already present, Please try to add unique", "left","warning")
+                triggerNotify("This selection combination already present, Please try to add unique", "left", "warning")
                 retrurndata = false;
             }
         }
@@ -658,7 +727,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
             } else if (d == "Custom Widget") {
                 $("#Pinned_Content_Div").hide();
                 $("#CustomWidget_Data_Div").show();
-               
+
             } else {
                 $("#Pinned_Content_Div").hide();
                 $("#CustomWidget_Data_Div").hide();
@@ -1564,26 +1633,26 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
         }
     }
 
-    
+
 
     $(document).on('click', '#deleteGalleryImage', function () {
         var Id = $(this).attr("data-Id");
         var currentEl = this;
-        
+
 
         function catchNotifyConfirm(choice) {
             if (choice) {
-                 $(currentEl).closest(".col-md-6").remove();
-                 deleteGalleryImageFile(Id);
+                $(currentEl).closest(".col-md-6").remove();
+                deleteGalleryImageFile(Id);
             }
         }
 
         triggerNotifyConfirm("Are you sure do you really want to delete this File?", catchNotifyConfirm);
-                
+
     })
 
     function deleteGalleryImageFile(Id) {
-         $("#global-loader").fadeIn("slow");
+        $("#global-loader").fadeIn("slow");
         var data = {
             Id: Id
         }

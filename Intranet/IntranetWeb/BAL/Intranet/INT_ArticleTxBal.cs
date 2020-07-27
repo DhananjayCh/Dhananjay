@@ -27,13 +27,13 @@ namespace IntranetWeb.BAL.Intranet
             jArray = restService.GetAllItemFromList(clientContext, "INT_ArticleTx", rESTOption);
             return jArray;
         }
-        public List<INT_ArticleTxModel> GetArticleData(ClientContext clientContext, string Id)
+        public List<INT_ArticleTxModel> GetArticleData(ClientContext clientContext, string filterData)
         {
             List<INT_ArticleTxModel> articleData = new List<INT_ArticleTxModel>();
             string filter = "";
-            if(Id != null)
+            if(filterData != null && filterData != "")
             {
-                filter = "(Id eq "+Id+")";
+                filter = filterData;
             }
             JArray jArray = RESTGet(clientContext, filter);
             foreach (JObject j in jArray)
