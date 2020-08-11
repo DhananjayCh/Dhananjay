@@ -20,7 +20,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $scope.CustomWidgetData = "";
     $scope.IsNoticeDocAdded = false;
     var noticeDoc = {};
-
+    $(".tab_content").attr("title", "");
     $scope.urlfix = decodeURIComponent(getUrlVars()["SPHostUrl"]).split('/sites/')[0];
 
 
@@ -785,7 +785,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
     $(document).on('click', '.add_Click', function () {
         var tab_Clicked = $(this).attr('data-Tab');
         if (tab_Clicked == "Award") {
-            oprnPopupByClick(tab_Clicked, createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true), createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', false, true));
+            oprnPopupByClick(tab_Clicked, createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true), createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', true, true));
         } else if (tab_Clicked == "Pages") {
             $scope.widgetCollection = [];
             getSettingBy().then(function (response) {
@@ -1000,6 +1000,10 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     $("#Menu_URL").parent().append("<label class='error'>Enter Url</label>");
                     $("#Menu_URL").addClass('errorBorderRichText');
                     return false;
+                } else if (($("#Menu_URL").val()).indexOf("https://") == -1 && ($("#Menu_URL").val()).indexOf("http://") == -1) {
+                    $("#Menu_URL").parent().append("<label class='error'>Enter Url</label>");
+                    $("#Menu_URL").addClass('errorBorderRichText');
+                    return false;
                 }
             }
 
@@ -1091,7 +1095,11 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                     return false;
                 }
             } else {
-                if ($("#Quick_Link_Url").val() == "" || $("Quick_Link_Url").val() == null) {
+                if ($("#Quick_Link_Url").val() == "" || $("#Quick_Link_Url").val() == null) {
+                    $("#Quick_Link_Url").parent().append("<label class='error'>Enter Url</label>");
+                    $("#Quick_Link_Url").addClass('errorBorderRichText');
+                    return false;
+                } else if (($("#Quick_Link_Url").val()).indexOf("https://") == -1 && ($("#Quick_Link_Url").val()).indexOf("http://") == -1) {
                     $("#Quick_Link_Url").parent().append("<label class='error'>Enter Url</label>");
                     $("#Quick_Link_Url").addClass('errorBorderRichText');
                     return false;
@@ -2023,6 +2031,21 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                         return false;
                     }
 
+                } else if (arrayData[i].type == "URL") {
+                    if ($("#" + arrayData[i].id).text() == "" || $("#" + arrayData[i].id).text() == null) {
+                        $("#" + arrayData[i].id).parent().append("<label class='error'>" + arrayData[i].message + "</label>");
+                        $("#" + arrayData[i].id).addClass('errorBorderRichText');
+                        $("#" + arrayData[i].id).focus();
+                        returnResult = false;
+                        return false;
+                    } else if (($("#" + arrayData[i].id).text()).indexOf("https://") > -1 && ($("#" + arrayData[i].id).text()).indexOf("http://") > -1){
+                        $("#" + arrayData[i].id).parent().append("<label class='error'>" + arrayData[i].message + "</label>");
+                        $("#" + arrayData[i].id).addClass('errorBorderRichText');
+                        $("#" + arrayData[i].id).focus();
+                        returnResult = false;
+                        return false;
+                    }
+
                 }
 
             } else if (arrayData[i].selector_Type == "class") {
@@ -2090,7 +2113,7 @@ settingApp.controller('settingController', function ($scope, $http, $compile, Co
                 console.log(response);
             });
         } else if (openFor == "Award") {
-            a.awardHtml = createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', false, true);
+            a.awardHtml = createDropdownData($scope.awardType, 'Award_type', 'Award_type', '', true, true);
             a.empData = createDropdownData($scope.allEmpData, 'ID', 'FullName', 'EmpCode', false, true);
             inilizeEditpopUp(a, openFor);
         } else if (openFor == "Card_SettingPop") {

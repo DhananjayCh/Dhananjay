@@ -151,6 +151,7 @@
                                                             <th class="border-bottom-0">ID</th>
                                                             <th class="border-bottom-0">Notice Title</th>
                                                             <th class="border-bottom-0">Description</th>
+                                                            <th class="border-bottom-0">IsDoc Attached</th>
                                                             <th class="border-bottom-0">Pinned Notice</th>
                                                             <th class="border-bottom-0">Active</th>
                                                             <th class="border-bottom-0">Action</th>
@@ -161,6 +162,10 @@
                                                             <td>{{n.ID}}</td>
                                                             <td>{{n.Notice_Title}}</td>
                                                             <td class="dataTableDecriptionElipses">{{getTextFromHtml(n.Description)}}</td>
+                                                            <td>
+                                                                <span class="badge badge-success" ng-show="n.DocUrl!= null && n.DocUrl != ''">Yes</span>
+                                                                <span class="badge badge-danger" ng-show="n.DocUrl == null || n.DocUrl == ''">No</span>
+                                                            </td>
                                                             <td>
                                                                 <span class="badge badge-success" ng-show={{n.Pinned_Notice}}>Yes</span>
                                                                 <span class="badge badge-danger" ng-show=!{{n.Pinned_Notice}}>No</span>
